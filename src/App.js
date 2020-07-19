@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import Layout from "./components/Layout/Layout";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Auth from "./components/Auth/Auth";
-import Create from "./components/Create/Create";
+import Create from "./container/Create/Create";
 import Listing from "./container/Listing/Listing";
-
+import Home from "./components/Home/Home";
 const App = () => {
   return (
     <Router>
@@ -15,7 +15,7 @@ const App = () => {
           <Route path="/listings" component={Listing} />
           <Route path="/create" component={Create} />
           <Route path="/signin" component={Auth} />
-          <Route path="/" />
+          <Route path="/" component={Home} />
         </Switch>
       </div>
     </Router>
