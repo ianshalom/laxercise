@@ -1,0 +1,36 @@
+.Nav {
+  display: flex;
+  list-style: none;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.MainNav {
+  font-size: 20px;
+  width: 100%;
+  height: 70px;
+  background-color: #f6ab6c;
+}
+
+.NavElements {
+  margin: 5px;
+  padding: 5px;
+}
+
+.NavElements:hover {
+  text-decoration: underline;
+  background-color: green;
+  cursor: pointer;
+}
+
+.NavBrand {
+  margin: 5px;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.NavBrand:hover {
+  background-color: green;
+  cursor: pointer;
+  font-size: 22px;
+}
