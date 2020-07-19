@@ -1,13 +1,13 @@
 import React from "react";
 import Aux from "../../hoc/Aux";
 import Navigation from "../Navigation/Navigation";
+import Jumbotron from "../UI/Jumbotron/Jumbotron";
 
 const Layout = () => {
   return (
     <Aux>
-      <h1>LaxErcise</h1>
       <Navigation />
-      <div>Jumbotron</div>
+      <Jumbotron />
       <div>Listings</div>
     </Aux>
   );

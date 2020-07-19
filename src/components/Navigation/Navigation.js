@@ -1,18 +1,36 @@
 import React from "react";
 import "./Navigation.css";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 const Navigation = () => {
-  const navElements = ["Home", "Listings", "Create", "Sign In", "Sign Up"];
-
-  const navBar = navElements.map((el) => {
-    return <li className={"NavElements"}>{el}</li>;
-  });
-
   return (
     <nav className={"MainNav"}>
       <ul className={"Nav"}>
-        <li className={"NavBrand"}>LaxErcise</li>
-        {navBar}
+        <li>
+          <Link to="/" className={"NavBrand"}>
+            LaxErcise
+          </Link>
+        </li>
+        <li>
+          <Link to="/" className={"NavElements"}>
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link to="/listings" className={"NavElements"}>
+            Listings
+          </Link>
+        </li>
+        <li>
+          <Link to="/create" className={"NavElements"}>
+            Create
+          </Link>
+        </li>
+        <li>
+          <Link to="/signin" className={"NavElements"}>
+            Sign In
+          </Link>
+        </li>
       </ul>
     </nav>
   );
