@@ -47,12 +47,13 @@ const Listings = () => {
       description: description,
       startDate: startDate.toDateString(),
       coordinates: coordinates,
+      location: address,
     };
 
     axios
       .post("/activity.json", data)
       .then((res) => {
-        // console.log(res);
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);

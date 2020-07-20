@@ -1,7 +1,17 @@
 .Nav {
   display: flex;
-  list-style: none;
   justify-content: flex-end;
+}
+
+.Nav :first-child {
+  float: left;
+}
+
+.Nav li {
+  display: flex;
+  list-style: none;
+  flex-direction: row;
+
   padding: 10px;
 }
 
@@ -24,8 +34,7 @@
 }
 
 .NavBrand {
-  margin: 5px;
-  padding: 5px;
+  padding: 10px;
   font-weight: bold;
 }
 

@@ -11,11 +11,7 @@ const Navigation = () => {
             LaxErcise
           </Link>
         </li>
-        <li>
-          <Link to="/" className={"NavElements"}>
-            Home
-          </Link>
-        </li>
+
         <li>
           <Link to="/listings" className={"NavElements"}>
             Listings

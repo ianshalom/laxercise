@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import Listings from "../../components/Listings/Listings";
 import axios from "../../axios-create";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 class Listing extends Component {
   state = {
     activities: null,
+    loading: true,
   };
   componentDidMount() {
     axios
@@ -20,8 +22,8 @@ class Listing extends Component {
         this.setState({
           ...activities,
           activities: activities,
+          loading: false,
         });
-        console.log(this.state.activities);
       })
       .catch((err) => {
         console.log(err);
@@ -35,6 +37,7 @@ class Listing extends Component {
         return (
           <Listings
             key={listing.id}
+            id={listing.id}
             title={listing.title}
             description={listing.description}
             startDate={listing.startDate}
@@ -46,8 +49,8 @@ class Listing extends Component {
     }
 
     return (
-      <div class="container">
-        <div class="row">{listings}</div>{" "}
+      <div className="container">
+        <div className="row">{this.state.loading ? <Spinner /> : listings}</div>{" "}
       </div>
     );
   }

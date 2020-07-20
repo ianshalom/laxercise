@@ -1,21 +1,26 @@
-import React from "react";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+// import Spinner from '../UI/Spinner/Spinner'
 
-const Listings = (props) => {
-  const activityCard = (
-    <div className="card text-center">
-      <div className="card-header">Featured</div>
-      <div className="card-body">
-        <h5 className="card-title">{props.title}</h5>
-        <p className="card-text">{props.description}</p>
-        <a href="/" className="btn btn-primary">
-          Sign Up!
-        </a>
+class Listings extends Component {
+  render() {
+    const activityCard = (
+      <div className="card text-center">
+        <div className="card-header">Featured</div>
+        <div className="card-body">
+          <h5 className="card-title">{this.props.title}</h5>
+          <p className="card-text">{this.props.description}</p>
+          <Link key={this.props.id} to={"/listings/" + this.props.id}>
+            <button className="btn btn-primary">View full page</button>
+          </Link>
+        </div>
+        <div className="card-footer text-muted">
+          When? {this.props.startDate}
+        </div>
       </div>
-      <div class="card-footer text-muted">When? {props.startDate}</div>
-    </div>
-  );
-
-  return <div className="col-sm mt-4">{activityCard}</div>;
-};
+    );
+    return <div className="col-sm mt-4">{activityCard}</div>;
+  }
+}
 
 export default Listings;
