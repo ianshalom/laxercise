@@ -7,6 +7,7 @@ import Create from "./container/Create/Create";
 import Listing from "./container/Listing/Listing";
 import ListingPage from "./components/Listings/Listing";
 import Home from "./components/Home/Home";
+import MappedLocation from "./components/Listings/Map/Map";
 const App = () => {
   return (
     <Router>
@@ -15,6 +16,7 @@ const App = () => {
         <Switch>
           <Route path="/listings" exact component={Listing} />
           <Route path="/listings/:listingId" component={ListingPage} />
+          <Route path="/mappedLocation" component={MappedLocation} />
           <Route path="/create" component={Create} />
           <Route path="/signin" component={Auth} />
           <Route path="/" component={Home} />

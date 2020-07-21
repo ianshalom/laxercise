@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Create.css";
 import axios from "../../axios-create";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,7 +13,8 @@ const Listings = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  // const [date, setDate] = useState("");
+  const [image, setImage] = useState("");
+  const [participantLimit, setParticipantLimit] = useState("");
 
   //Geolocation Coordinates
   const [address, setAddress] = useState("");
@@ -41,13 +43,24 @@ const Listings = () => {
     setDescription(event.target.value);
   };
 
+  const handleImageChange = (event) => {
+    setImage(event.target.value);
+  };
+
+  const handleParticipantLimitChange = (event) => {
+    setParticipantLimit(event.target.value);
+  };
+
   const handleSubmit = (event) => {
     const data = {
       title: title,
       description: description,
       startDate: startDate.toDateString(),
+      time: startDate.getHours(),
       coordinates: coordinates,
       location: address,
+      participantLimit: participantLimit,
+      imageUrl: image,
     };
 
     axios
@@ -62,23 +75,42 @@ const Listings = () => {
   };
 
   return (
-    <div onSubmit={handleSubmit}>
+    <div onSubmit={handleSubmit} className={"container"}>
+      <h1 style={{ textAlign: "center" }}>Organise an Activity</h1>
+      <hr />
       <form>
+        <label>Activity Title</label>
         <input
           type="text"
           name="title"
-          placeholder="Give your activity a name"
           onChange={handleTitleChange}
           value={title}
         />
+        <label>Display an activity image. (Use Image URL)</label>
+        <input
+          type="text"
+          name="image"
+          onChange={handleImageChange}
+          value={image}
+        />
+        <label>Set the maximum limit for number of participants.</label>
+        <input
+          type="text"
+          name="maxParticipants"
+          onChange={handleParticipantLimitChange}
+          value={participantLimit}
+        />
+        <label>
+          Add a description to your activity. (i.e. Things to bring, what to
+          expect, timeline of activities)
+        </label>
         <textarea
           type="text"
           name="description"
-          placeholder="Give your activity a name"
           onChange={handleDescriptionChange}
           value={description}
         />
-
+        <label>Select start date and time. </label>
         <DatePicker
           name="dateAndTime"
           dateFormat="d MMM yyyy"
@@ -90,6 +122,7 @@ const Listings = () => {
           value={startDate}
         />
 
+        <label>Type in location and click on selected choice.</label>
         <PlacesAutocomplete
           value={address}
           onChange={setAddress}
@@ -130,7 +163,7 @@ const Listings = () => {
           )}
         </PlacesAutocomplete>
 
-        <input type="submit" />
+        <input type="submit" className={"button"} />
       </form>
     </div>
   );
