@@ -1,63 +1,69 @@
 import React, { Component } from "react";
-import axios from "../../axios-create";
+
 import Spinner from "../UI/Spinner/Spinner";
 import MyMapComponent from "./Map/Map";
+import { connect } from "react-redux";
+import * as actions from "../../store/actions/index";
 
 class Listing extends Component {
   state = {
-    listing: [],
-    lng: null,
-    lat: null,
-    loading: true,
     markerShown: true,
   };
 
   componentDidMount() {
-    axios
-      .get("/activity.json/", this.props.match.params.listingId)
-      .then((res) => {
-        this.setState({
-          ...this.state.listing,
-          listing: res.data[this.props.match.params.listingId],
-          lng: res.data[this.props.match.params.listingId].coordinates.lng,
-          lat: res.data[this.props.match.params.listingId].coordinates.lat,
-          loading: false,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.props.displayActivityById(this.props.match.params.listingId);
+    console.log(this.props.match.params.listingId);
   }
 
   render() {
+    console.log(this.props.activity);
     let listing = null;
-    if (this.state.listing) {
+    if (this.props.activity) {
       listing = (
         <div>
-          <h2>TITLE: {this.state.listing.title}</h2>
-          <p>DESCRIPTION: {this.state.listing.description}</p>
-          <p>START DATE: {this.state.listing.startDate}</p>
-          <p>START TIME: {this.state.listing.time}</p>
+          <h2>TITLE: {this.props.activity.title}</h2>
+          <p>DESCRIPTION: {this.props.activity.description}</p>
+          <p>START DATE: {this.props.activity.startDate}</p>
+          <p>START TIME: {this.props.activity.time}</p>
           <p>
-            {this.state.listing.location
-              ? this.state.listing.location
+            {this.props.activity.location
+              ? this.props.activity.location
               : "No Location Listed ... "}
           </p>
-          <p>LATITUDE: {this.state.lat}</p>
-          <p>LONGDITUTE: {this.state.lng}</p>
+          <p>LATITUDE: {this.props.lat}</p>
+          <p>LONGDITUTE: {this.props.lng}</p>
           <div>
-            <img src={this.state.listing.imageUrl} alt="" />
+            <img src={this.props.activity.imageUrl} alt="" />
           </div>
           <MyMapComponent
             isMarkerShown={this.state.markerShown}
-            lat={this.state.lat}
-            lng={this.state.lng}
-            id={this.state.listing.id}
+            lat={this.props.lat}
+            lng={this.props.lng}
+            id={this.state.listingId}
+            name={this.props.activity.location}
           />
         </div>
       );
     }
-    return <div>{this.state.loading ? <Spinner /> : listing}</div>;
+    return <div>{this.props.loading ? <Spinner /> : listing}</div>;
   }
 }
-export default Listing;
+
+const mapStateToProps = (state) => {
+  return {
+    activity: state.activity.selectedActivity,
+    lat: state.activity.lat,
+    lng: state.activity.lng,
+    loading: state.activity.loading,
+    token: state.auth.token,
+    userId: state.auth.userId,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    displayActivityById: (id) => dispatch(actions.displayActivity(id)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Listing);

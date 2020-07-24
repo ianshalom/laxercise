@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-// import Spinner from '../UI/Spinner/Spinner'
 
 class Listings extends Component {
   render() {
+    // console.log(this.props.id);
     const activityCard = (
       <div className="card text-center">
         <div className="card-header">Featured</div>
@@ -19,7 +19,11 @@ class Listings extends Component {
         </div>
       </div>
     );
-    return <div className="col-sm mt-4">{activityCard}</div>;
+    return (
+      <div className="col-sm mt-4" key={this.props.key}>
+        {activityCard}
+      </div>
+    );
   }
 }
 

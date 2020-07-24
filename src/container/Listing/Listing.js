@@ -1,48 +1,30 @@
 import React, { Component } from "react";
 import Listings from "../../components/Listings/Listings";
-import axios from "../../axios-create";
+
 import Spinner from "../../components/UI/Spinner/Spinner";
+import * as actions from "../../store/actions/index";
+import { connect } from "react-redux";
 
 class Listing extends Component {
-  state = {
-    activities: null,
-    loading: true,
-  };
   componentDidMount() {
-    axios
-      .get("/activity.json")
-      .then((res) => {
-        const activities = [];
-        for (let key in res.data) {
-          activities.push({
-            ...res.data[key],
-            id: key,
-          });
-        }
-        this.setState({
-          ...activities,
-          activities: activities,
-          loading: false,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.props.onFetchActivitiesList();
   }
 
   render() {
+    console.log(this.props.activities);
     let listings = null;
-    if (this.state.activities) {
-      listings = this.state.activities.map((listing) => {
+    if (this.props.activities) {
+      listings = this.props.activities.map((listing) => {
+        console.log(listing.data.title);
         return (
           <Listings
             key={listing.id}
             id={listing.id}
-            title={listing.title}
-            description={listing.description}
-            startDate={listing.startDate}
-            lat={listing.coordinates.lat}
-            lng={listing.coordinates.lng}
+            title={listing.data.title}
+            description={listing.data.description}
+            startDate={listing.data.startDate}
+            lat={listing.data.coordinates.lat}
+            lng={listing.data.coordinates.lng}
           />
         );
       });
@@ -50,10 +32,25 @@ class Listing extends Component {
 
     return (
       <div className="container">
-        <div className="row">{this.state.loading ? <Spinner /> : listings}</div>{" "}
+        <div className="row">{this.props.loading ? <Spinner /> : listings}</div>{" "}
       </div>
     );
   }
 }
 
-export default Listing;
+const mapStateToProps = (state) => {
+  return {
+    activities: state.activity.activityData,
+    loading: state.activity.loading,
+    token: state.auth.tokenId,
+    id: state.auth.userId,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onFetchActivitiesList: () => dispatch(actions.getActivitiesList()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Listing);
