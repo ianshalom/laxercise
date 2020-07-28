@@ -1,22 +1,24 @@
 import * as actionTypes from "./actionTypes";
-
+import { getUserProfile } from "./auth";
 // import axios from "../../axios-create";
 // import db from "../../db/index";
 import firebase from "../../db/index";
 
-// export const getActivities = () => {
-//   db.collection("activities")
-//     .get()
-//     .then((snapshot) => {
-//       snapshot.docs.forEach((doc) => {
-//         const activity = doc.data();
-//         console.log(activity);
-//       });
-//     });
-//   return {
-//     type: actionTypes.GET_ACTIVITIES_LIST_SUCCESS,
-//   };
-// };
+const db = firebase.firestore();
+
+//MODAL
+export const modalClosed = () => {
+  return {
+    type: actionTypes.MODAL_CLOSED,
+  };
+};
+
+//JOIN ACTIVITY
+export const joinActivity = () => {
+  return {
+    type: actionTypes.JOIN_ACTIVITY,
+  };
+};
 
 //CREATE ACTIVITY
 export const createActivityStart = () => {
@@ -32,49 +34,35 @@ export const createActivityFail = (error) => {
   };
 };
 
-export const createActivitySuccess = (id, data) => {
+export const createActivitySuccess = (data) => {
   return {
     type: actionTypes.CREATE_ACTIVITY_SUCCESS,
     activityData: data,
-    activityId: id,
   };
 };
+export const createInit = () => {
+  return {
+    type: actionTypes.CREATE_INIT,
+  };
+};
+
+//Create userRef - creates connection between activity and property
+// export const createUserRef = (uid) => db.doc("profiles/" + uid);
 
 export const createActivity = (data) => {
   return (dispatch) => {
     dispatch(createActivityStart());
-    const db = firebase.firestore();
     db.collection("activities")
       .add({ data })
       .then((docRef) => {
-        console.log(docRef.id);
-
-        dispatch(createActivitySuccess(docRef.id, data));
+        dispatch(createActivitySuccess(data));
       })
       .catch((err) => {
-        console.log(err);
         dispatch(createActivityFail(err));
       });
   };
 };
 
-// export const createActivity = (data) => {
-//   return (dispatch) => {
-//     dispatch(createActivityStart());
-//     console.log(data);
-//     axios
-//       .post("/activity.json", data)
-//       .then((res) => {
-//         //Dispatch success and pass data to reducers with callback function
-
-//         dispatch(createActivitySuccess(data));
-//       })
-//       .catch((err) => {
-//         dispatch(createActivityFail(err));
-//         console.log(err);
-//       });
-//   };
-// };
 //GET ACTIVITY BY ID
 export const displayActivitySuccess = (activity) => {
   return {
@@ -99,12 +87,13 @@ export const displayActivityStart = () => {
 export const displayActivity = (id) => {
   return async (dispatch) => {
     dispatch(displayActivityStart());
-    const db = firebase.firestore();
     db.collection("activities")
       .doc(id)
       .get()
-      .then((snapshot) => {
+      .then(async (snapshot) => {
         const activity = snapshot.data();
+        activity.user = await getUserProfile(activity.data.uid);
+
         dispatch(displayActivitySuccess(activity));
       })
       .catch((err) => {
@@ -113,20 +102,6 @@ export const displayActivity = (id) => {
   };
 };
 
-// export const displayActivity = (id) => {
-//   return (dispatch) => {
-//     dispatch(displayActivityStart());
-//     axios
-//       .get("/activity.json/", id)
-//       .then((res) => {
-//         dispatch(displayActivitySuccess(res.data[id]));
-//       })
-//       .catch((err) => {
-//         dispatch(displayActivityFail(err));
-//       });
-//   };
-// };
-
 //FETCH ACTIVITIES LIST
 export const getActivitiesListStart = () => {
   return {
@@ -134,10 +109,11 @@ export const getActivitiesListStart = () => {
   };
 };
 
-export const getActivitiesListSuccess = (activities) => {
+export const getActivitiesListSuccess = (activities, id) => {
   return {
     type: actionTypes.GET_ACTIVITIES_LIST_SUCCESS,
     activities: activities,
+    activityId: id,
   };
 };
 
@@ -151,7 +127,6 @@ export const getActivitiesListFail = (error) => {
 export const getActivitiesList = () => {
   return (dispatch) => {
     dispatch(getActivitiesListStart());
-    const db = firebase.firestore();
     db.collection("activities")
       .get()
       .then((snapshot) => {
@@ -162,41 +137,7 @@ export const getActivitiesList = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        dispatch(getActivitiesListSuccess(activities));
+        dispatch(getActivitiesListSuccess(activities, activities.id));
       });
-
-    //   .then((docs) => {
-    //     console.log(docs);
-
-    //   })
-    //   .catch((err) => {
-    //     dispatch(getActivitiesListFail(err));
-    //     console.log(err);
-    // });
   };
 };
-
-// export const getActivitiesList = () => {
-//   return (dispatch) => {
-//     dispatch(getActivitiesListStart());
-//     // const queryParams =
-//     //   "?auth" + token + '&orderBy="userId"&equalTo="' + userId + '"';
-//     axios
-//       .get("/activity.json")
-//       .then((res) => {
-//         const activities = [];
-//         for (let key in res.data) {
-//           activities.push({
-//             ...res.data[key],
-//             id: key,
-//           });
-//         }
-//         console.log(activities);
-//         dispatch(getActivitiesListSuccess(activities));
-//       })
-//       .catch((err) => {
-//         dispatch(getActivitiesListFail(err));
-//         console.log(err);
-//       });
-//   };
-// };

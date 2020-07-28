@@ -12,10 +12,9 @@ const myActivitiesStart = (state, action) => {
 };
 
 const myActivitiesSuccess = (state, action) => {
-  const myActivities = updateObject(action.fetchActivities);
   return updateObject(state, {
     loading: false,
-    myActivities: state.myActivities.push(myActivities),
+    myActivities: action.fetchActivities,
   });
 };
 

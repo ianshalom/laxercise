@@ -11,11 +11,10 @@ class Listing extends Component {
   }
 
   render() {
-    console.log(this.props.activities);
     let listings = null;
+    console.log(this.props.activities);
     if (this.props.activities) {
       listings = this.props.activities.map((listing) => {
-        console.log(listing.data.title);
         return (
           <Listings
             key={listing.id}
@@ -42,8 +41,7 @@ const mapStateToProps = (state) => {
   return {
     activities: state.activity.activityData,
     loading: state.activity.loading,
-    token: state.auth.tokenId,
-    id: state.auth.userId,
+    id: state.auth.uid,
   };
 };
 

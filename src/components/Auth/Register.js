@@ -46,20 +46,10 @@ const Register = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    error: state.auth.error,
-    redirect: state.auth.redirect,
-  };
-};
-
 const mapDispatchToProps = (dispatch) => {
   return {
     registerUser: (data) => dispatch(actions.register(data)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(Register));
+export default connect(null, mapDispatchToProps)(withRouter(Register));

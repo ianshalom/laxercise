@@ -1,43 +1,38 @@
 import React, { Component } from "react";
-// import Activities from "../../components/Activities/Activities";
-import { connect } from "react-redux";
-import * as actions from "../../store/actions/index";
+import Listings from "../../components/Listings/Listings";
+import WithAuthorization from "../../hoc/withAuth";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 class MyActivities extends Component {
   componentDidMount() {
-    // console.log(this.props.userId);
-    // console.log(this.props.loading);
-    // console.log(this.props.error);
-    // console.log(this.props.allActivities);
-    // this.props.onGetActivities(this.props.userId);
+    this.props.getMyActivities(this.props.auth.uid);
   }
-
   render() {
-    console.log(this.props.token);
-    console.log(this.props.userId);
-    console.log(this.props.activities);
+    let myActivitiesCards = null;
+    if (this.props.myActivities) {
+      myActivitiesCards = this.props.myActivities.map((listing) => {
+        return (
+          <Listings
+            key={listing.id}
+            id={listing.id}
+            title={listing.data.title}
+            description={listing.data.description}
+            startDate={listing.data.startDate}
+            lat={listing.data.coordinates.lat}
+            lng={listing.data.coordinates.lng}
+          />
+        );
+      });
+    }
+
     return (
-      // <Activities />
-      <h1>HELLLO</h1>
+      <div className="container">
+        <div className="row">
+          {this.props.loading ? <Spinner /> : myActivitiesCards}
+        </div>{" "}
+      </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    token: state.auth.tokenId,
-    userId: state.auth.userId,
-    activities: state.myActivities.myActivities,
-    loading: state.myActivities.loading,
-    error: state.myActivities.error,
-    allActivities: state.activity.activityData,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onGetActivities: (userId) => dispatch(actions.getMyActivities(userId)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyActivities);
+export default WithAuthorization(MyActivities);

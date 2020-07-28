@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 class Listings extends Component {
   render() {
-    // console.log(this.props.id);
     const activityCard = (
       <div className="card text-center">
         <div className="card-header">Featured</div>

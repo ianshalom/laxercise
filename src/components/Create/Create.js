@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./Create.css";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PlacesAutocomplete, {
@@ -9,6 +8,7 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
+import { Redirect } from "react-router-dom";
 
 class Listings extends Component {
   state = {
@@ -23,13 +23,18 @@ class Listings extends Component {
     imageUrl: "",
   };
 
+  componentDidMount() {
+    if (this.props.redirect) {
+      return <Redirect to="/" />;
+    }
+  }
+
   //Geolocation Coordinates
   handleSelect = async (value) => {
     const results = await geocodeByAddress(value);
     const latLng = await getLatLng(results[0]);
     this.setState({
       coordinates: latLng,
-      // location: results,
     });
   };
 
@@ -80,17 +85,19 @@ class Listings extends Component {
       location: this.state.location,
       participantLimit: this.state.participantLimit,
       imageUrl: this.state.imageUrl,
-      // userId: this.props.userId,
+      uid: this.props.userId,
     };
     console.log("CLICKEDDDDD-------------");
+    this.props.onCreateActivity();
     this.props.onSubmitActivity(data);
   };
 
   render() {
-    // console.log(this.props.token);
-    // console.log(this.props.userId);
+    const createdRedirect = this.props.created ? <Redirect to="/" /> : null;
+
     return (
       <div onSubmit={this.handleSubmit} className={"container"}>
+        {createdRedirect}
         <h1 style={{ textAlign: "center" }}>Organise an Activity</h1>
         <hr />
         <form>
@@ -135,7 +142,6 @@ class Listings extends Component {
             onChange={(date) =>
               this.setState({
                 startDate: date,
-                // time: date.getHours(),
               })
             }
             timeClassName={this.handleColor}
@@ -167,7 +173,6 @@ class Listings extends Component {
                     const style = {
                       backgroundColor: suggestion.active ? "#ceefe4" : "#fff",
                     };
-
                     return (
                       <div
                         key={suggestion.placeId}
@@ -192,14 +197,16 @@ class Listings extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    userId: state.auth.userId,
-    token: state.auth.tokenId,
+    userId: state.auth.uid,
+    loading: state.activity.loading,
+    created: state.activity.created,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onSubmitActivity: (data) => dispatch(actions.createActivity(data)),
+    onCreateActivity: () => dispatch(actions.createInit()),
   };
 };
 

@@ -1,0 +1,13 @@
+.input {
+  width: 60%;
+  height: 50px;
+  padding: 8px;
+  margin: 5px 0;
+}
+
+.note {
+  font-style: italic;
+  color: #ccc;
+  font-size: 12px;
+  padding: 2px;
+}
