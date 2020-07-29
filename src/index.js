@@ -10,6 +10,7 @@ import myActivitiesReducer from "./store/reducers/myActivities";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import confirmation from "./store/reducers/confirmation";
+import requests from "./store/reducers/requests";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   myActivities: myActivitiesReducer,
   confirmation: confirmation,
+  requests: requests,
 });
 
 const store = createStore(

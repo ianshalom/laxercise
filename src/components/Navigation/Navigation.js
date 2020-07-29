@@ -3,7 +3,7 @@ import "./Navigation.css";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
-
+import Aux from "../../hoc/Aux";
 class Navigation extends Component {
   render() {
     return (
@@ -19,11 +19,24 @@ class Navigation extends Component {
           </li>
 
           {this.props.authState ? (
-            <li>
-              <Link to="/create" className={"NavElements"}>
-                Create
-              </Link>
-            </li>
+            <Aux>
+              {" "}
+              <li>
+                <Link to="/create" className={"NavElements"}>
+                  Create
+                </Link>
+              </li>
+              <li>
+                <Link to="/requests/sent" className={"NavElements"}>
+                  Sent Requests
+                </Link>
+              </li>
+              <li>
+                <Link to="/requests/received" className={"NavElements"}>
+                  Received Requests
+                </Link>
+              </li>
+            </Aux>
           ) : null}
 
           {!this.props.authState && (

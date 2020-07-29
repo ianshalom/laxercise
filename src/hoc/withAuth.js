@@ -12,6 +12,11 @@ const withAuthorization = (Component) => {
           getMyActivities={(id) => this.props.onGetMyActivities(id)}
           myActivities={this.props.myActivities}
           loading={this.props.loading}
+          currentUserId={this.props.currentUser}
+          sentRequests={this.props.onSentRequests}
+          receivedRequests={this.props.onReceivedRequests}
+          sent={this.props.sentRequests}
+          received={this.props.receivedRequests}
         />
       ) : (
         <Redirect to="/login" />
@@ -24,12 +29,17 @@ const withAuthorization = (Component) => {
       auth: state.auth,
       myActivities: state.myActivities.myActivities,
       loading: state.myActivities.loading,
+      currentUser: state.auth.uid,
+      sentRequests: state.requests.sent,
+      receivedRequests: state.requests.received,
     };
   };
 
   const mapDispatchToProps = (dispatch) => {
     return {
       onGetMyActivities: (userId) => dispatch(actions.getMyActivities(userId)),
+      onSentRequests: (id) => dispatch(actions.fetchSentRequests(id)),
+      onReceivedRequests: (id) => dispatch(actions.fetchReceivedRequests(id)),
     };
   };
 

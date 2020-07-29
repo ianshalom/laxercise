@@ -12,6 +12,8 @@ import Home from "./components/Home/Home";
 import MyActivities from "./container/MyActivities/MyActivities";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
+import SentRequestsPage from "./components/participation/SentRequest";
+import ReceivedRequestsPage from "./components/participation/ReceivedRequest";
 
 class App extends Component {
   componentDidMount() {
@@ -37,6 +39,11 @@ class App extends Component {
               <Route path="/create" component={Create} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
+              <Route path="/requests/sent" component={SentRequestsPage} />
+              <Route
+                path="/requests/received"
+                component={ReceivedRequestsPage}
+              />
               <Route path="/myactivities" component={MyActivities} />
               <Route path="/" component={Home} />
             </Switch>

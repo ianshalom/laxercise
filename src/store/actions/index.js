@@ -18,3 +18,4 @@ export {
 } from "./auth";
 export { getMyActivities } from "./myActivities";
 export { createConfirmation } from "./confirmation";
+export { fetchSentRequests, fetchReceivedRequests } from "./requests";
