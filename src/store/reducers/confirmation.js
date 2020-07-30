@@ -2,6 +2,7 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   confirmed: false,
+  statusChange: false,
 };
 
 const reducer = (state = initialState, action) => {

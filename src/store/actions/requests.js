@@ -18,7 +18,11 @@ export const getUserInfo = (requests, activities) => {
       .doc(userId)
       .get()
       .then((userInfo) => {
-        requests.userData = userInfo.data();
+        requests.map((request) => {
+          request.userData = userInfo.data();
+          request.activityInfo = activities;
+          return requests;
+        });
         dispatch(sentRequestsSuccess(requests));
       });
   };
@@ -32,6 +36,7 @@ export const getActivityData = (requests, activityId) => {
       .then(async (snapshot) => {
         const activities = await snapshot.data();
         dispatch(getUserInfo(requests, activities));
+        return activities;
       });
   };
 };
@@ -72,23 +77,40 @@ export const receivedRequestsSuccess = (requests) => {
   };
 };
 
-export const getReceivedUserInfo = (requests, id) => {
-  return (dispatch) => {
+export const getReceivedUserInfoActivityData = (activityId, request) => {
+  db.collection("activities")
+    .doc(activityId)
+    .get()
+    .then((activity) => {
+      request.map((el) => {
+        el.activityInfo = activity.data();
+        return request;
+      });
+    });
+};
+
+export const getReceivedUserInfo = (requests, id, activityId) => {
+  return async (dispatch) => {
     db.collection("profiles")
       .doc(id)
       .get()
-      .then((userInfo) => {
-        requests.userData = userInfo.data();
-        dispatch(receivedRequestsSuccess(requests));
+      .then(async (userInfo) => {
+        requests.map(async (request) => {
+          request.userData = userInfo.data();
+          getReceivedUserInfoActivityData(activityId, requests);
+          return request;
+        });
+        await dispatch(receivedRequestsSuccess(requests));
       });
   };
 };
 
 export const getReceivedUserId = (requests) => {
   return (dispatch) => {
-    requests.map((user) =>
-      dispatch(getReceivedUserInfo(requests, user.fromUser))
-    );
+    requests.map((user) => {
+      dispatch(getReceivedUserInfo(requests, user.fromUser, user.activityId));
+      return requests;
+    });
   };
 };
 
@@ -103,7 +125,6 @@ export const fetchReceivedRequests = (userId) => {
           id: doc.id,
           ...doc.data(),
         }));
-
         dispatch(getReceivedUserId(receivedRequests));
       })
       .catch((err) => {

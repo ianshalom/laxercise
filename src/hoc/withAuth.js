@@ -6,7 +6,7 @@ import * as actions from "../store/actions/index";
 const withAuthorization = (Component) => {
   class WithAuthorization extends React.Component {
     render() {
-      return this.props.auth.isAuth ? (
+      return this.props.auth.isAuthResolved ? (
         <Component
           auth={this.props.auth}
           getMyActivities={(id) => this.props.onGetMyActivities(id)}
@@ -17,6 +17,7 @@ const withAuthorization = (Component) => {
           receivedRequests={this.props.onReceivedRequests}
           sent={this.props.sentRequests}
           received={this.props.receivedRequests}
+          changeParticipationStatus={this.props.onParticipantStatusChange}
         />
       ) : (
         <Redirect to="/login" />
@@ -40,6 +41,8 @@ const withAuthorization = (Component) => {
       onGetMyActivities: (userId) => dispatch(actions.getMyActivities(userId)),
       onSentRequests: (id) => dispatch(actions.fetchSentRequests(id)),
       onReceivedRequests: (id) => dispatch(actions.fetchReceivedRequests(id)),
+      onParticipantStatusChange: (confirmationId, status) =>
+        dispatch(actions.changeParticipationStatus(confirmationId, status)),
     };
   };
 

@@ -11,6 +11,13 @@ const createRequestList = (requestType) => {
         return action.requests;
       case actionTypes.USER_INFO_SUCCESS:
         return action.userInfo;
+      case actionTypes.CHANGE_PARTICIPATION_STATUS_SUCCESS:
+        const nextState = [...state];
+        const confirmationIndex = nextState.findIndex(
+          (o) => o.id === action.confirmationId
+        );
+        nextState[confirmationIndex].status = action.status;
+        return nextState;
       default:
         return state;
     }

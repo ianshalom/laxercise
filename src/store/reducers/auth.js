@@ -4,7 +4,7 @@ import { updateObject } from "../../utility/utility";
 const initialState = {
   user: [],
   isAuth: false,
-  isAuthResolved: true,
+  isAuthResolved: false,
   uid: null,
   error: null,
   loading: false,
