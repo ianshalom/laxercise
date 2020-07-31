@@ -17,5 +17,10 @@ export {
   resetAuthState,
 } from "./auth";
 export { getMyActivities } from "./myActivities";
-export { createConfirmation, changeParticipationStatus } from "./confirmation";
+export {
+  createConfirmation,
+  changeParticipationStatus,
+  confirmParticipation,
+  subscribeToMsgs,
+} from "./confirmation";
 export { fetchSentRequests, fetchReceivedRequests } from "./requests";

@@ -5,6 +5,7 @@ import { ToastProvider } from "react-toast-notifications";
 import * as actions from "./store/actions/index";
 import Spinner from "./components/UI/Spinner/Spinner";
 import { connect } from "react-redux";
+
 import Create from "./container/Create/Create";
 // import Listing from "./container/Listing/Listing";
 import ListingPage from "./components/Listings/Listing";
@@ -14,12 +15,17 @@ import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import SentRequestsPage from "./components/participation/SentRequest";
 import ReceivedRequestsPage from "./components/participation/ReceivedRequest";
+import Messages from "./components/Messages/ReceivedMessages";
 
 class App extends Component {
   componentDidMount() {
     this.unsubscribeAuth = actions.onAuthStateChanged((authUser) => {
       this.props.onResetAuth();
       this.props.onStoreAuth(authUser);
+      if (authUser) {
+        console.log(authUser.uid);
+        this.props.onGetMessages(authUser.uid);
+      }
     });
   }
 
@@ -45,6 +51,7 @@ class App extends Component {
                 component={ReceivedRequestsPage}
               />
               <Route path="/myactivities" component={MyActivities} />
+              <Route path="/messages" component={Messages} />
               <Route path="/" component={Home} />
             </Switch>
           </Router>
@@ -68,6 +75,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onStoreAuth: (authUser) => dispatch(actions.storeAuthUser(authUser)),
     onResetAuth: () => dispatch(actions.resetAuthState()),
+    onGetMessages: (authUserId) =>
+      dispatch(actions.subscribeToMsgs(authUserId)),
   };
 };
 

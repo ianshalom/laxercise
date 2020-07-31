@@ -26,3 +26,58 @@ export const changeParticipationStatusSuccess = (confirmationId, status) => {
     requestType: "received",
   };
 };
+
+export const markConfirmationAsInParticipants = (confirmationId) => {
+  db.collection("confirmation")
+    .doc(confirmationId)
+    .update({ participantConfirmed: true });
+  participantConfirmedForUI(confirmationId);
+};
+
+export const participantConfirmedForUI = (confirmationId) => {
+  return {
+    type: actionTypes.PARTICIPANT_CONFIRMED_FOR_UI,
+    confirmationId: confirmationId,
+    requestType: "sent",
+  };
+};
+
+export const confirmParticipation = (confirmed, message) => {
+  db.collection("participants")
+    .add(confirmed)
+    .then((docRef) => {
+      message.cta = `/participants/${docRef.id}`;
+      markConfirmationAsInParticipants(confirmed.fromConfirmation);
+      sendMessage(message);
+    });
+};
+
+export const sendMessage = (message) => {
+  db.collection("profiles")
+    .doc(message.toUser)
+    .collection("messages")
+    .add(message);
+};
+
+//Messages
+export const subscribeToMsgs = (userId) => {
+  return (dispatch) => {
+    db.collection("profiles")
+      .doc(userId)
+      .collection("messages")
+      .onSnapshot((snapshot) => {
+        const messages = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        dispatch(fetchMessages(messages));
+      });
+  };
+};
+
+export const fetchMessages = (messages) => {
+  return {
+    type: actionTypes.FETCH_USER_MESSAGES,
+    messages: messages,
+  };
+};

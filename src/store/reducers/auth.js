@@ -76,6 +76,8 @@ const reducer = (state = initialState, action) => {
       return authUserFail(state, action);
     case actionTypes.RESET_AUTH_STATE:
       return resetAuthState(state, action);
+    case actionTypes.FETCH_USER_MESSAGES:
+      return { ...state, user: { ...state.user, messages: action.messages } };
     default:
       return state;
   }

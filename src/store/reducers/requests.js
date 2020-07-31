@@ -18,6 +18,13 @@ const createRequestList = (requestType) => {
         );
         nextState[confirmationIndex].status = action.status;
         return nextState;
+      case actionTypes.PARTICIPANT_CONFIRMED_FOR_UI:
+        const participantState = [...state];
+        const participantIndex = participantState.findIndex(
+          (o) => o.id === action.confirmationId
+        );
+        participantState[participantIndex].participantConfirmed = true;
+        return participantState;
       default:
         return state;
     }

@@ -11,7 +11,23 @@ export const sentRequestsSuccess = (requests) => {
   };
 };
 
-export const getUserInfo = (requests, activities) => {
+export const getOrganiserInfo = (requests, organiserId) => {
+  return (dispatch) => {
+    db.collection("profiles")
+      .doc(organiserId)
+      .get()
+      .then((organiserInfo) => {
+        const organiserData = organiserInfo.data();
+        requests.map((request) => {
+          request.organiserData = organiserData;
+          return requests;
+        });
+        dispatch(sentRequestsSuccess(requests));
+      });
+  };
+};
+
+export const getUserInfo = (requests, activities, organiserId) => {
   return (dispatch) => {
     const userId = activities.data.uid;
     db.collection("profiles")
@@ -23,19 +39,20 @@ export const getUserInfo = (requests, activities) => {
           request.activityInfo = activities;
           return requests;
         });
-        dispatch(sentRequestsSuccess(requests));
+        dispatch(getOrganiserInfo(requests, organiserId));
       });
   };
 };
 
-export const getActivityData = (requests, activityId) => {
+export const getActivityData = (requests, activityId, organiserId) => {
   return async (dispatch) => {
     db.collection("activities")
       .doc(activityId)
       .get()
       .then(async (snapshot) => {
         const activities = await snapshot.data();
-        dispatch(getUserInfo(requests, activities));
+
+        dispatch(getUserInfo(requests, activities, organiserId));
         return activities;
       });
   };
@@ -44,7 +61,7 @@ export const getActivityData = (requests, activityId) => {
 export const extractDataById = (requests) => {
   return (dispatch) => {
     requests.map((request) =>
-      dispatch(getActivityData(requests, request.activityId))
+      dispatch(getActivityData(requests, request.activityId, request.fromUser))
     );
   };
 };

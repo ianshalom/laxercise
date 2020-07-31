@@ -61,11 +61,19 @@ class Navigation extends Component {
             </li>
           )}
           {this.props.authState ? (
-            <li>
-              <Link to="/myactivities" className={"NavElements"}>
-                My Activities
-              </Link>
-            </li>
+            <Aux>
+              {" "}
+              <li>
+                <Link to="/myactivities" className={"NavElements"}>
+                  My Activities
+                </Link>
+              </li>
+              <li>
+                <Link to="/messages" className={"NavElements"}>
+                  Messages
+                </Link>
+              </li>
+            </Aux>
           ) : null}
         </ul>
       </nav>

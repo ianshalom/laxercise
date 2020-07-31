@@ -18,6 +18,7 @@ const withAuthorization = (Component) => {
           sent={this.props.sentRequests}
           received={this.props.receivedRequests}
           changeParticipationStatus={this.props.onParticipantStatusChange}
+          messages={this.props.messages}
         />
       ) : (
         <Redirect to="/login" />
@@ -33,6 +34,7 @@ const withAuthorization = (Component) => {
       currentUser: state.auth.uid,
       sentRequests: state.requests.sent,
       receivedRequests: state.requests.received,
+      messages: state.auth.user.messages,
     };
   };
 
