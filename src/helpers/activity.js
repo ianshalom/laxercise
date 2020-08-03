@@ -20,7 +20,7 @@ export const newParticipant = (
 });
 
 export const newMessage = (
-  toUser,
+  fromUser,
   name,
   organiserName,
   organiserAvatar,
@@ -28,14 +28,12 @@ export const newMessage = (
 ) => ({
   isRead: false,
   type: "welcome",
-  text: `Hello ${name}, please sign up for activity as soon as possible`,
+  text: `Hello ${name}, thank you for signing up for this activity. See you soon!`,
   cta: "", //click to action
-  toUser: toUser,
+  toUser: fromUser,
   fromUser: {
     name: organiserName,
     avatar: organiserAvatar,
   },
   activityTitle: title,
-  // activityLink: `/activity/${activity.id}`,
-  // createdAt: this.props.firebase.firestore.Timestamp.fromDate(new Date()),
 });

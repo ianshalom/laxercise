@@ -1,11 +1,13 @@
 import { combineReducers } from "redux";
 import * as actionTypes from "../actions/actionTypes";
+// import { updateObject } from "../../utility/utility";
 
 const createRequestList = (requestType) => {
   return (state = [], action) => {
     if (action.requestType !== requestType) {
       return state;
     }
+
     switch (action.type) {
       case actionTypes.FETCH_REQUESTS_SUCCESS:
         return action.requests;
@@ -17,6 +19,7 @@ const createRequestList = (requestType) => {
           (o) => o.id === action.confirmationId
         );
         nextState[confirmationIndex].status = action.status;
+
         return nextState;
       case actionTypes.PARTICIPANT_CONFIRMED_FOR_UI:
         const participantState = [...state];

@@ -23,4 +23,8 @@ export {
   confirmParticipation,
   subscribeToMsgs,
 } from "./confirmation";
-export { fetchSentRequests, fetchReceivedRequests } from "./requests";
+export {
+  fetchSentRequests,
+  fetchReceivedRequests,
+  fetchUserDataByActivityId,
+} from "./requests";

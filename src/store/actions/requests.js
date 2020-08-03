@@ -1,7 +1,58 @@
 import firebase from "../../db/index";
 import { FETCH_REQUESTS_SUCCESS } from "./actionTypes";
+import * as actionTypes from "./actionTypes";
 
 const db = firebase.firestore();
+
+export const getProfileData = (id) => {
+  return db
+    .collection("profiles")
+    .doc(id)
+    .get()
+    .then((user) => {
+      const userData = user.data();
+      return userData;
+    });
+};
+
+export const fetchUserDataByActivityIdSuccess = (data) => {
+  return {
+    type: actionTypes.FETCH_USER_DATA_BY_ACTIVITY_ID,
+    data: data,
+  };
+};
+
+export const mapData = (data) => {
+  return async (dispatch) => {
+    const profileData = await Promise.all(
+      data.map(async (el) => {
+        const profileData = await getProfileData(el.fromUser);
+        el.profileData = profileData;
+        return el;
+      })
+    );
+    await dispatch(fetchUserDataByActivityIdSuccess(profileData));
+  };
+};
+
+export const fetchUserDataByActivityId = (activityId) => {
+  return (dispatch) => {
+    db.collection("participants")
+      .where("activityId", "==", activityId)
+      .get()
+      .then((activities) => {
+        const activitiesData = activities.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        dispatch(mapData(activitiesData));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
 export const sentRequestsSuccess = (requests) => {
   return {
@@ -51,7 +102,6 @@ export const getActivityData = (requests, activityId, organiserId) => {
       .get()
       .then(async (snapshot) => {
         const activities = await snapshot.data();
-
         dispatch(getUserInfo(requests, activities, organiserId));
         return activities;
       });
@@ -76,7 +126,6 @@ export const fetchSentRequests = (userId) => {
           id: doc.id,
           ...doc.data(),
         }));
-
         dispatch(extractDataById(sentRequests));
       })
       .catch((err) => {
@@ -89,45 +138,48 @@ export const receivedRequestsSuccess = (requests) => {
   return {
     type: FETCH_REQUESTS_SUCCESS,
     requests: requests,
-
     requestType: "received",
   };
 };
 
-export const getReceivedUserInfoActivityData = (activityId, request) => {
-  db.collection("activities")
+export const getReceivedUserInfoActivityData = async (activityId) => {
+  return db
+    .collection("activities")
     .doc(activityId)
     .get()
     .then((activity) => {
-      request.map((el) => {
-        el.activityInfo = activity.data();
-        return request;
-      });
+      const activityData = activity.data();
+      return activityData;
     });
 };
 
-export const getReceivedUserInfo = (requests, id, activityId) => {
+export const getReceivedUserInfo = (id) => {
+  return db
+    .collection("profiles")
+    .doc(id)
+    .get()
+    .then((userInfo) => {
+      const userData = userInfo.data();
+      return userData;
+    });
+};
+
+export const getReceivedUserId = (object) => {
   return async (dispatch) => {
-    db.collection("profiles")
-      .doc(id)
-      .get()
-      .then(async (userInfo) => {
-        requests.map(async (request) => {
-          request.userData = userInfo.data();
-          getReceivedUserInfoActivityData(activityId, requests);
-          return request;
-        });
-        await dispatch(receivedRequestsSuccess(requests));
-      });
-  };
-};
-
-export const getReceivedUserId = (requests) => {
-  return (dispatch) => {
-    requests.map((user) => {
-      dispatch(getReceivedUserInfo(requests, user.fromUser, user.activityId));
-      return requests;
-    });
+    const map = await Promise.all(
+      object.map(async (obj) => {
+        const userInfo = await getReceivedUserInfo(obj.fromUser);
+        const organiserInfo = await getReceivedUserInfo(obj.toUser);
+        const activityData = await getReceivedUserInfoActivityData(
+          obj.activityId
+        );
+        obj.organiserInfo = organiserInfo;
+        obj.activityData = activityData;
+        obj.userData = userInfo;
+        return obj;
+      })
+    );
+    await dispatch(receivedRequestsSuccess(map));
   };
 };
 
@@ -138,10 +190,11 @@ export const fetchReceivedRequests = (userId) => {
       .where("toUser", "==", userId)
       .get()
       .then(async (snapshot) => {
-        const receivedRequests = snapshot.docs.map((doc) => ({
+        const receivedRequests = await snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+        // console.log(receivedRequests);
         dispatch(getReceivedUserId(receivedRequests));
       })
       .catch((err) => {

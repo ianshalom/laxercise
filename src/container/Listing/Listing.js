@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Listings from "../../components/Listings/Listings";
-
+import "./Listing.css";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import * as actions from "../../store/actions/index";
 import { connect } from "react-redux";
@@ -13,7 +13,7 @@ class Listing extends Component {
   render() {
     let listings = null;
     console.log(this.props.activities);
-    if (this.props.activities) {
+    if (this.props.activities || this.props.activities === []) {
       listings = this.props.activities.map((listing) => {
         return (
           <Listings
@@ -31,7 +31,9 @@ class Listing extends Component {
 
     return (
       <div className="container">
-        <div className="row">{this.props.loading ? <Spinner /> : listings}</div>{" "}
+        <div className="row displayActivities">
+          {this.props.loading ? <Spinner /> : listings}
+        </div>{" "}
       </div>
     );
   }

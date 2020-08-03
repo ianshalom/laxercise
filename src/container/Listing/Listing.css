@@ -1,0 +1,7 @@
+.displayActivities {
+  display: flex;
+  flex-direction: flex-row;
+  flex-wrap: wrap;
+  margin: 10px;
+  padding: 10px;
+}

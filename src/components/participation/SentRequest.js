@@ -51,8 +51,6 @@ class SentRequests extends Component {
   };
 
   render() {
-    console.log(this.props.sent);
-
     let userInfo = null;
     if (this.props.sent) {
       userInfo = this.props.sent.map((data) => {
@@ -75,7 +73,7 @@ class SentRequests extends Component {
             {data.status === "accepted" && !data.participantConfirmed && (
               <div>
                 <hr />
-                <button
+                {/* <button
                   onClick={() =>
                     this.createCollaboration(
                       data.activityId,
@@ -92,7 +90,7 @@ class SentRequests extends Component {
                   }
                 >
                   Collaborate
-                </button>
+                </button> */}
               </div>
             )}
           </div>

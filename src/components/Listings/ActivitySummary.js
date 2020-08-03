@@ -17,16 +17,7 @@ const ActivitySummary = (props) => {
     setConfirmation({ ...confirmation, [name]: value });
   };
 
-  console.log(props.currentUser);
-  console.log(props.activityId);
-  console.log(confirmation);
-
   const submitConfirmation = () => {
-    // const confirmationCopy = { ...confirmation };
-    // // confirmationCopy.fromUser = props.currentUser;
-    // // confirmationCopy.toUser = props.user.uid;
-    // // confirmationCopy.activity = props.activityId;
-
     createConfirmation(confirmation)
       .then((_) => {
         addToast("Your attendance has been confirmed for this activity!", {

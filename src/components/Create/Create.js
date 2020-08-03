@@ -21,7 +21,10 @@ class Listings extends Component {
     location: "",
     participantLimit: "",
     imageUrl: "",
+    address: "",
   };
+
+  //##################################################
 
   componentDidMount() {
     if (this.props.redirect) {
@@ -29,12 +32,20 @@ class Listings extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.title !== this.state.title) {
+      return <Redirect to="/" />;
+    }
+  }
+
   //Geolocation Coordinates
   handleSelect = async (value) => {
     const results = await geocodeByAddress(value);
+    console.log(value);
     const latLng = await getLatLng(results[0]);
     this.setState({
       coordinates: latLng,
+      address: value,
     });
   };
 
@@ -42,9 +53,9 @@ class Listings extends Component {
     return time.getHours() > 12 ? "text-success" : "text-error";
   };
 
-  handleChange = (location) => {
+  handleChange = (address) => {
     this.setState({
-      location,
+      address,
     });
   };
 
@@ -82,7 +93,7 @@ class Listings extends Component {
       startDate: formatDate,
       time: formatTime,
       coordinates: this.state.coordinates,
-      location: this.state.location,
+      location: this.state.address,
       participantLimit: this.state.participantLimit,
       imageUrl: this.state.imageUrl,
       uid: this.props.userId,
@@ -93,11 +104,8 @@ class Listings extends Component {
   };
 
   render() {
-    const createdRedirect = this.props.created ? <Redirect to="/" /> : null;
-
     return (
       <div onSubmit={this.handleSubmit} className={"container"}>
-        {createdRedirect}
         <h1 style={{ textAlign: "center" }}>Organise an Activity</h1>
         <hr />
         <form>
@@ -107,6 +115,7 @@ class Listings extends Component {
             name="title"
             onChange={this.handleTitleChange}
             value={this.state.title}
+            required
           />
           <label>Display an activity image. (Use Image URL)</label>
           <input
@@ -114,13 +123,15 @@ class Listings extends Component {
             name="image"
             onChange={this.handleImageChange}
             value={this.state.imageUrl}
+            required
           />
           <label>Set the maximum limit for number of participants.</label>
           <input
-            type="text"
+            type="number"
             name="maxParticipants"
             onChange={this.handleParticipantLimitChange}
             value={this.state.participantLimit}
+            required
           />
           <label>
             Add a description to your activity. (i.e. Things to bring, what to
@@ -131,6 +142,7 @@ class Listings extends Component {
             name="description"
             onChange={this.handleDescriptionChange}
             value={this.state.description}
+            required
           />
           <label>Select start date and time. </label>
           <DatePicker
@@ -146,13 +158,15 @@ class Listings extends Component {
             }
             timeClassName={this.handleColor}
             value={this.state.startDate}
+            required
           />
 
           <label>Type in location and click on selected choice.</label>
           <PlacesAutocomplete
-            value={this.state.location}
+            value={this.state.address}
             onChange={this.handleChange}
             onSelect={this.handleSelect}
+            required
           >
             {({
               getInputProps,
@@ -162,9 +176,10 @@ class Listings extends Component {
             }) => (
               <div>
                 <input
-                  type="text"
-                  value={this.state.location}
+                  // type="text"
+                  // value={this.state.value}
                   {...getInputProps({ placeholder: "Enter Location" })}
+                  required
                 />
                 <div>
                   {loading ? <div>...loading</div> : null}

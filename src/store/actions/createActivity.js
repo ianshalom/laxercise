@@ -1,7 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import { getUserProfile } from "./auth";
-// import axios from "../../axios-create";
-// import db from "../../db/index";
+
 import firebase from "../../db/index";
 
 const db = firebase.firestore();
@@ -84,6 +83,22 @@ export const displayActivityStart = () => {
   };
 };
 
+export const getRequestToJoinActivityStatus = (activity, activityId) => {
+  return (dispatch) => {
+    db.collection("confirmation")
+      .where("activityId", "==", activityId)
+      .get()
+      .then((snapshot) => {
+        const activityInfo = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        activity.activityInfo = activityInfo;
+        dispatch(displayActivitySuccess(activity));
+      });
+  };
+};
+
 export const displayActivity = (id) => {
   return async (dispatch) => {
     dispatch(displayActivityStart());
@@ -93,8 +108,8 @@ export const displayActivity = (id) => {
       .then(async (snapshot) => {
         const activity = snapshot.data();
         activity.user = await getUserProfile(activity.data.uid);
-
-        dispatch(displayActivitySuccess(activity));
+        dispatch(getRequestToJoinActivityStatus(activity, id));
+        // dispatch(displayActivitySuccess(activity));
       })
       .catch((err) => {
         dispatch(displayActivityFail(err));

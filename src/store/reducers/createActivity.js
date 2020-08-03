@@ -4,6 +4,7 @@ import { updateObject } from "../../utility/utility";
 const initialState = {
   activityData: [],
   selectedActivity: [],
+  participantData: [],
   lat: "",
   lng: "",
   loading: false,
@@ -46,6 +47,10 @@ const getActivitiesListSuccess = (state, action) => {
 };
 const getActivitiesListFail = (state, action) => {
   return updateObject(state, { loading: false });
+};
+
+const fetchUserDataByActivityIdSuccess = (state, action) => {
+  return updateObject(state, { participantData: action.data });
 };
 
 //FETCH SELECTED ACTIVITY BASED ON ID
@@ -101,6 +106,8 @@ const reducer = (state = initialState, action) => {
       return joinActivity(state, action);
     case actionTypes.MODAL_CLOSED:
       return modalClosed(state, action);
+    case actionTypes.FETCH_USER_DATA_BY_ACTIVITY_ID:
+      return fetchUserDataByActivityIdSuccess(state, action);
     default:
       return state;
   }
