@@ -1,0 +1,26 @@
+.avatar {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+}
+
+.avatar-container {
+  height: 50px;
+  width: 100px;
+}
+
+.participant-name {
+  font-size: 15px;
+}
+
+.participant-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.participants-section {
+  overflow: scroll;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}

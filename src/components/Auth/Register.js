@@ -35,9 +35,6 @@ const Register = (props) => {
           <h3 className="title has-text-grey">Register</h3>
           <p className="subtitle has-text-grey">Please Register to proceed.</p>
           <div className="box">
-            <figure className="avatar">
-              <img src="https://placehold.it/128x128" alt="" />
-            </figure>
             <RegisterForm onRegister={registerUser} />
           </div>
         </div>

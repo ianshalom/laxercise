@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
 
 const mapStyles = {
-  width: "70%",
-  height: "60%",
+  width: "100%",
+  height: "80%",
 };
 
 class MyMapComponent extends Component {

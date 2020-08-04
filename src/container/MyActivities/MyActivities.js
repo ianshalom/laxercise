@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Listings from "../../components/Listings/Listings";
 import WithAuthorization from "../../hoc/withAuth";
+import "./MyActivities.css";
 import Spinner from "../../components/UI/Spinner/Spinner";
 
 class MyActivities extends Component {
@@ -20,6 +21,7 @@ class MyActivities extends Component {
             startDate={listing.data.startDate}
             lat={listing.data.coordinates.lat}
             lng={listing.data.coordinates.lng}
+            image={listing.data.imageUrl}
           />
         );
       });
@@ -27,7 +29,7 @@ class MyActivities extends Component {
 
     return (
       <div className="container">
-        <div className="row">
+        <div className="row container">
           {this.props.loading ? <Spinner /> : myActivitiesCards}
         </div>{" "}
       </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./ActivitySummary.css";
 import { useToasts } from "react-toast-notifications";
-import { createConfirmation } from "../../store/actions/confirmation";
+import { createConfirmation } from "../../../store/actions/confirmation";
 const ActivitySummary = (props) => {
   const { addToast } = useToasts();
 

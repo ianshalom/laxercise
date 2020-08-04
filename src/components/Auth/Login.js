@@ -34,9 +34,6 @@ const Login = (props) => {
           <h3 className="title has-text-grey">Login</h3>
           <p className="subtitle has-text-grey">Please login to proceed.</p>
           <div className="box">
-            <figure className="avatar">
-              <img src="https://placehold.it/128x128" alt="" />
-            </figure>
             <form onSubmit={handleSubmit(loginUser)}>
               <div className="field">
                 <div className="control">

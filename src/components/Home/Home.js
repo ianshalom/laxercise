@@ -1,12 +1,14 @@
 import React from "react";
-import Jumbotron from "../UI/Jumbotron/Jumbotron";
+
 import Listing from "../../container/Listing/Listing";
 import Aux from "../../hoc/Aux";
-
+import LandingPage from "./LandingPage";
+import "./Home.css";
 const Home = () => {
   return (
     <Aux>
-      <Jumbotron />
+      <LandingPage />
+
       <Listing />
     </Aux>
   );

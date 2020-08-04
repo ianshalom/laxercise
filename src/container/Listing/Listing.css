@@ -1,7 +1,12 @@
 .displayActivities {
+  max-width: 1140px;
+  width: 100vw;
+  height: 70vh;
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: flex-row;
   flex-wrap: wrap;
-  margin: 10px;
-  padding: 10px;
+  text-align: center;
+  margin: 0 auto;
 }

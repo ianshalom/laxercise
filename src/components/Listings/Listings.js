@@ -1,25 +1,32 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import "./Card.css";
 
 class Listings extends Component {
   render() {
     const activityCard = (
-      <div className="card text-center">
-        <div className="card-header">Featured</div>
-        <div className="card-body">
-          <h5 className="card-title">{this.props.title}</h5>
-          <p className="card-text">{this.props.description}</p>
-          <Link key={this.props.id} to={"/listings/" + this.props.id}>
-            <button className="btn btn-primary">View full page</button>
-          </Link>
+      <>
+        <div className={"card-image"}>
+          <img
+            className={"activity-image"}
+            src={this.props.image}
+            alt={this.props.title}
+          />
         </div>
-        <div className="card-footer text-muted">
-          When? {this.props.startDate}
+        <div className={"card-text"}>
+          <h4 className={"card-title"}>{this.props.title}</h4>
+          <p className={"card-description"}>{this.props.description}</p>
         </div>
-      </div>
+
+        <Link key={this.props.id} to={"/listings/" + this.props.id}>
+          <button className={"view-button"}>View Activity</button>
+        </Link>
+
+        <div className={"card-date"}>{this.props.startDate}</div>
+      </>
     );
     return (
-      <div className="col-sm mt-4" key={this.props.key}>
+      <div className={"card-grid"} key={this.props.key}>
         {activityCard}
       </div>
     );

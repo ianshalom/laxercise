@@ -3,80 +3,32 @@ import "./Navigation.css";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
-import Aux from "../../hoc/Aux";
+
+import Burger from "./Burger.js";
+
 class Navigation extends Component {
+  state = {
+    toggle: false,
+  };
+
   render() {
     return (
-      <nav className={"MainNav"}>
-        <ul className={"Nav"}>
-          {this.props.authState ? (
-            <div>{`Hey ${this.props.auth.fullName}`}</div>
-          ) : null}
-          <li>
+      <>
+        <nav className={"MainNav"}>
+          <div>
             <Link to="/" className={"NavBrand"}>
-              LaxErcise
+              Lax<span className={"ercise"}>Ercise</span>
             </Link>
-          </li>
-
+          </div>
           {this.props.authState ? (
-            <Aux>
-              {" "}
-              <li>
-                <Link to="/create" className={"NavElements"}>
-                  Create
-                </Link>
-              </li>
-              <li>
-                <Link to="/requests/sent" className={"NavElements"}>
-                  Sent Requests
-                </Link>
-              </li>
-              <li>
-                <Link to="/requests/received" className={"NavElements"}>
-                  Received Requests
-                </Link>
-              </li>
-            </Aux>
+            <div
+              className={"username"}
+            >{`Hey ${this.props.auth.fullName}`}</div>
           ) : null}
-
-          {!this.props.authState && (
-            <>
-              <li>
-                <Link to="/login" className={"NavElements"}>
-                  Login
-                </Link>
-              </li>
-              <li>
-                <Link to="/register" className={"NavElements"}>
-                  Register
-                </Link>
-              </li>
-            </>
-          )}
-          {this.props.authState && (
-            <li>
-              <Link to="/" className={"NavElements"}>
-                <button onClick={this.props.onLogout}>Logout</button>
-              </Link>
-            </li>
-          )}
-          {this.props.authState ? (
-            <Aux>
-              {" "}
-              <li>
-                <Link to="/myactivities" className={"NavElements"}>
-                  My Activities
-                </Link>
-              </li>
-              <li>
-                <Link to="/messages" className={"NavElements"}>
-                  Messages
-                </Link>
-              </li>
-            </Aux>
-          ) : null}
-        </ul>
-      </nav>
+          <Burger />
+        </nav>
+        <hr className={"nav-border"} />
+      </>
     );
   }
 }

@@ -24,16 +24,15 @@ class Listing extends Component {
             startDate={listing.data.startDate}
             lat={listing.data.coordinates.lat}
             lng={listing.data.coordinates.lng}
+            image={listing.data.imageUrl}
           />
         );
       });
     }
 
     return (
-      <div className="container">
-        <div className="row displayActivities">
-          {this.props.loading ? <Spinner /> : listings}
-        </div>{" "}
+      <div className="row displayActivities">
+        {this.props.loading ? <Spinner /> : listings}
       </div>
     );
   }
