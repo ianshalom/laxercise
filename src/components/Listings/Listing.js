@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
 import Modal from "../UI/Modal/Modal";
 import ActivitySummary from "./ActivitySummary/ActivitySummary";
-import Image from "./Image/Image";
+// import Image from "./Image/Image";
 import ActivityInformation from "./ActivityInformation/ActivityInformation";
 import Participants from "./Participants/Participants";
 import "./Listing.css";
@@ -23,8 +23,8 @@ class Listing extends Component {
   }
 
   render() {
+    console.log(this.props.activity);
     let listing = null;
-
     if (this.props.activity && this.props.activityData) {
       let currentUserActivityDataIndex = null;
       currentUserActivityDataIndex = this.props.activityData.findIndex(
@@ -49,15 +49,48 @@ class Listing extends Component {
               activityId={this.props.match.params.listingId}
             />
           </Modal>
+          <div className={"join-button-container"}>
+            {this.props.activity.uid === this.props.currentUser ||
+            !this.props.isAuth ? null : !currentUserActivityData &&
+              !this.props.statusChanged ? (
+              <button
+                className={"join-button"}
+                onClick={this.props.onJoinActivity}
+                type="button"
+              >
+                Join
+              </button>
+            ) : (
+              <button
+                className={"join-button"}
+                disabled
+                style={{
+                  backgroundColor:
+                    currentUserActivityData.status === "accepted"
+                      ? "green"
+                      : currentUserActivityData.status === "declined"
+                      ? "red"
+                      : null,
+                }}
+              >
+                {currentUserActivityData.status.toUpperCase()}
+              </button>
+            )}
+          </div>
           <div className={"whole-container"}>
-            <h1 className={"header"}>Activity Details</h1>
+            <h1 className={"header"}>{this.props.activity.title}</h1>
 
             <hr />
             <div className="top-container">
-              <div className={"image-container"}>
-                <Image image={this.props.activity.imageUrl} />
+              <div className={"map-container"}>
+                <MyMapComponent
+                  isMarkerShown={this.state.markerShown}
+                  lat={this.props.lat}
+                  lng={this.props.lng}
+                  id={this.state.listingId}
+                  name={this.props.activity.location}
+                />
               </div>
-
               <div className={"activity-information"}>
                 <ActivityInformation
                   title={this.props.activity.title}
@@ -65,55 +98,22 @@ class Listing extends Component {
                   date={this.props.activity.startDate}
                   time={this.props.activity.time}
                   location={this.props.activity.location}
+                  currentUsername={this.props.currentUsername}
+                  by={this.props.activity.createdBy}
                 />
-                {this.props.activity.uid === this.props.currentUser ||
-                !this.props.isAuth ? null : !currentUserActivityData &&
-                  !this.state.clicked ? (
-                  <button
-                    className={"join-button"}
-                    onClick={this.props.onJoinActivity}
-                    type="button"
-                  >
-                    Join
-                  </button>
-                ) : (
-                  <button
-                    className={"join-button"}
-                    disabled
-                    style={{
-                      backgroundColor:
-                        currentUserActivityData.status === "accepted"
-                          ? "green"
-                          : currentUserActivityData.status === "declined"
-                          ? "red"
-                          : null,
-                    }}
-                  >
-                    {currentUserActivityData.status.toUpperCase()}
-                  </button>
-                )}
               </div>
-
               <div className={"participants-container"}>
                 <Participants participants={this.props.participantData} />
-              </div>
+              </div>{" "}
             </div>
           </div>
-
-          <MyMapComponent
-            isMarkerShown={this.state.markerShown}
-            lat={this.props.lat}
-            lng={this.props.lng}
-            id={this.state.listingId}
-            name={this.props.activity.location}
-          />
         </div>
       );
     }
-    return <div>{this.props.loading ? <Spinner /> : listing}</div>;
+    return <div>{listing}</div>;
+    // }{this.props.loading ? <Spinner /> : listing}
   }
 }
-
 const mapStateToProps = (state) => {
   return {
     activity: state.activity.selectedActivity.data,
@@ -128,9 +128,10 @@ const mapStateToProps = (state) => {
     activityId: state.activity.activityId,
     isAuth: state.auth.isAuth,
     showButton: state.activity.showButton,
-    confirmed: state.confirmation.confirmed,
+    statusChanged: state.confirmation.statusChanged,
     usersWhoHaveJoined: state.requests.received,
     participantData: state.activity.participantData,
+    currentUsername: state.auth.currentUserName,
   };
 };
 

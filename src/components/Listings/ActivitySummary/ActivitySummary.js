@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./ActivitySummary.css";
-import { useToasts } from "react-toast-notifications";
+// import { useToasts } from "react-toast-notifications";
 import { createConfirmation } from "../../../store/actions/confirmation";
 const ActivitySummary = (props) => {
-  const { addToast } = useToasts();
+  // const { addToast } = useToasts();
 
   const [confirmation, setConfirmation] = useState({
     fromUser: props.currentUser,
@@ -18,17 +18,17 @@ const ActivitySummary = (props) => {
   };
 
   const submitConfirmation = () => {
-    createConfirmation(confirmation)
-      .then((_) => {
-        addToast("Your attendance has been confirmed for this activity!", {
-          appearance: "success",
-          autoDismiss: true,
-          autoDimissTimeout: 3000,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    createConfirmation(confirmation);
+    // .then((_) => {
+    //   addToast("Your attendance has been confirmed for this activity!", {
+    //     appearance: "success",
+    //     autodismiss: "true",
+    //     autodimisstimeout: 3000,
+    //   });
+    // })
+    // .catch((error) => {
+    //   console.log(error);
+    // });
     props.modalClosed();
   };
 

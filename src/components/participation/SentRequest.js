@@ -57,40 +57,39 @@ class SentRequests extends Component {
         return (
           <div key={data.id} className={"receivedCards"}>
             {data.status === "accepted" ? (
-              <h1>Accepted</h1>
+              <h4 style={{ color: "#96bb7c" }}>Accepted</h4>
             ) : data.status === "declined" ? (
-              <h1>Declined</h1>
+              <h4 style={{ color: "#e84a5f" }}>Declined</h4>
             ) : (
-              <h1>Pending</h1>
+              <h4 style={{ color: "#ad9d9d" }}>Pending</h4>
             )}
 
-            <h2>To: {data.userData.fullName}</h2>
-            <p>Note: {data.note}</p>
-            <p>Activity: {data.activityInfo.data.title}</p>
-            <p>Date: {data.activityInfo.data.startDate}</p>
-            <p>Time: {data.activityInfo.data.time + "00"} hours</p>
-            <p>Location: {data.activityInfo.data.location}</p>
+            <p>
+              <span className="to-user">To:</span> {data.userData.fullName}
+            </p>
+
+            <p>
+              <span className="activity grey-it">Activity:</span>{" "}
+              {data.activityInfo.data.title}
+            </p>
+            <p>
+              <span className="date grey-it">Date:</span>{" "}
+              {data.activityInfo.data.startDate}
+            </p>
+            <p>
+              <span className="time grey-it">Time:</span>{" "}
+              {data.activityInfo.data.time + "00"} hours
+            </p>
+            <p>
+              <span className="location grey-it">Location:</span>{" "}
+              {data.activityInfo.data.location}
+            </p>
+            <p>
+              <span className="note-to grey-it">Note:</span> {data.note}
+            </p>
             {data.status === "accepted" && !data.participantConfirmed && (
               <div>
                 <hr />
-                {/* <button
-                  onClick={() =>
-                    this.createCollaboration(
-                      data.activityId,
-                      data.activityInfo.data.title,
-                      data.activityInfo.data.imageUrl,
-                      data.toUser,
-                      data.id,
-                      data.fromUser,
-                      data.userData.fullName,
-                      data.userData.avatar,
-                      data.organiserData.fullName,
-                      data.organiserData.avatar
-                    )
-                  }
-                >
-                  Collaborate
-                </button> */}
               </div>
             )}
           </div>
@@ -99,13 +98,10 @@ class SentRequests extends Component {
     }
 
     return (
-      <div className="container">
-        <div className="content-wrapper">
-          <h1 className="title">Sent Requests</h1>
-          <div className="columns">
-            <div className="column is-one-third">{userInfo}</div>
-          </div>
-        </div>
+      <div className="sent-container">
+        <h1 className="title">Sent Requests</h1>
+        <hr />
+        <div className="sent-wrapper">{userInfo}</div>
       </div>
     );
   }

@@ -1,0 +1,29 @@
+.messages-card {
+  width: 330px;
+  height: 280px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 20px;
+}
+
+.bold-it {
+  font-weight: bold;
+}
+
+.activity-title,
+.message,
+.from-user {
+  margin: 15px 10px;
+}
+
+.messages-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.messages-header {
+  text-align: center;
+  padding-top: 12px;
+}

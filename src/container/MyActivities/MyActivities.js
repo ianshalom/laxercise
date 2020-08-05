@@ -29,9 +29,9 @@ class MyActivities extends Component {
 
     return (
       <div className="container">
-        <div className="row container">
+        <div className="row container" style={{ textAlign: "center" }}>
           {this.props.loading ? <Spinner /> : myActivitiesCards}
-        </div>{" "}
+        </div>
       </div>
     );
   }

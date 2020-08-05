@@ -15,6 +15,7 @@ export {
   storeAuthUser,
   logout,
   resetAuthState,
+  getUserName,
 } from "./auth";
 export { getMyActivities } from "./myActivities";
 export {

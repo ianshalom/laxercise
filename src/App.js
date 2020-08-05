@@ -5,7 +5,6 @@ import { ToastProvider } from "react-toast-notifications";
 import * as actions from "./store/actions/index";
 import Spinner from "./components/UI/Spinner/Spinner";
 import { connect } from "react-redux";
-
 import Create from "./container/Create/Create";
 // import Listing from "./container/Listing/Listing";
 import ListingPage from "./components/Listings/Listing";
@@ -16,7 +15,10 @@ import Register from "./components/Auth/Register";
 import SentRequestsPage from "./components/participation/SentRequest";
 import ReceivedRequestsPage from "./components/participation/ReceivedRequest";
 import Messages from "./components/Messages/ReceivedMessages";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faEnvelope, faKey, faHome } from "@fortawesome/free-solid-svg-icons";
 
+library.add(faEnvelope, faKey, faHome);
 class App extends Component {
   componentDidMount() {
     this.unsubscribeAuth = actions.onAuthStateChanged((authUser) => {
@@ -34,6 +36,9 @@ class App extends Component {
   }
 
   render() {
+    // {
+    //   /* ; */
+    // }
     let renderApplication = <Spinner />;
     if (this.props.authResolved) {
       renderApplication = (

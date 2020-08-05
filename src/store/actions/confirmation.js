@@ -8,15 +8,29 @@ export const confirmedAttendance = () => {
   };
 };
 
-export const createConfirmation = (confirmation) =>
+export const createConfirmationSuccess = () => {
+  console.log("IM HERE");
+  return {
+    type: actionTypes.CREATE_CONFIRMATION_SUCCESS,
+  };
+};
+
+export const createConfirmation = (confirmation) => {
   db.collection("confirmation").add(confirmation);
+  createConfirmationSuccess();
+};
 
 export const changeParticipationStatus = (confirmationId, status) => {
   return (dispatch) => {
-    console.log(confirmationId);
-    console.log(status);
-    db.collection("confirmation").doc(confirmationId).update({ status });
-    dispatch(changeParticipationStatusSuccess(confirmationId, status));
+    db.collection("confirmation")
+      .doc(confirmationId)
+      .update({ status })
+      .then((_) => {
+        dispatch(changeParticipationStatusSuccess(confirmationId, status));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };
 

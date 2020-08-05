@@ -8,8 +8,8 @@ class Participants extends Component {
     if (this.props.participants) {
       participants = this.props.participants.map((participant) => {
         return (
-          <div className={"participant-info"}>
-            <div key={participant.id} className={"avatar-container"}>
+          <div key={participant.id} className={"participant-info"}>
+            <div className={"avatar-container"}>
               <img
                 className={"avatar"}
                 src={participant.profileData.avatar}
@@ -26,7 +26,7 @@ class Participants extends Component {
     }
     return (
       <div className={"participants-section"}>
-        <h3>Participants</h3>
+        <h3 style={{ fontSize: "25px" }}>Participants</h3>
         <hr />
         {participants}
       </div>

@@ -109,7 +109,6 @@ export const displayActivity = (id) => {
         const activity = snapshot.data();
         activity.user = await getUserProfile(activity.data.uid);
         dispatch(getRequestToJoinActivityStatus(activity, id));
-        // dispatch(displayActivitySuccess(activity));
       })
       .catch((err) => {
         dispatch(displayActivityFail(err));

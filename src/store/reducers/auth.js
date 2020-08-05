@@ -9,6 +9,7 @@ const initialState = {
   error: null,
   loading: false,
   redirect: false,
+  currentUserName: "",
 };
 
 //##############################
@@ -26,12 +27,11 @@ const setAuthUser = (state, action) => {
     user: action.user,
     isAuthResolved: true,
     isAuth: !!action.user,
-    loading: false,
   });
 };
 
 const resetAuthState = (state, action) => {
-  return updateObject(state, { isAuthResolved: false });
+  return updateObject(state, { isAuthResolved: false, loading: false });
 };
 
 const logout = (state, action) => {
@@ -39,7 +39,12 @@ const logout = (state, action) => {
     user: null,
     isAuth: false,
     isAuthResolved: false,
+    loading: false,
+    currentUsername: "",
   });
+};
+const getUserName = (state, action) => {
+  return updateObject(state, { currentUserName: action.name });
 };
 
 const setAuthUserStart = (state, action) => {
@@ -78,6 +83,8 @@ const reducer = (state = initialState, action) => {
       return resetAuthState(state, action);
     case actionTypes.FETCH_USER_MESSAGES:
       return { ...state, user: { ...state.user, messages: action.messages } };
+    case actionTypes.GET_USER_NAME_SUCCESS:
+      return getUserName(state, action);
     default:
       return state;
   }

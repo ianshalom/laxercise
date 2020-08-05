@@ -9,27 +9,33 @@ import PlacesAutocomplete, {
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
 import { Redirect } from "react-router-dom";
+import isImageUrl from "is-image-url";
 
 class Listings extends Component {
   state = {
     title: "",
+    titleError: "",
     description: "",
+    descriptionError: "",
     startDate: "",
+    startDateError: "",
     time: "",
     coordinates: "",
     setLocation: "",
     location: "",
-    participantLimit: "",
+    locationError: "",
     imageUrl: "",
+    imageUrlError: "",
     address: "",
   };
 
   //##################################################
 
   componentDidMount() {
-    if (this.props.redirect) {
-      return <Redirect to="/" />;
-    }
+    // if (this.props.redirect) {
+    //   return <Redirect to="/" />;
+    // }
+    this.props.onGetUserName(this.props.userId);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -37,6 +43,78 @@ class Listings extends Component {
       return <Redirect to="/" />;
     }
   }
+
+  validate = () => {
+    console.log(this.state.description.length);
+    let titleError = "";
+    let descriptionError = "";
+    let locationError = "";
+    let imageUrlError = "";
+    let startDateError = "";
+
+    //Activity Title Validation
+    if (this.state.title.length === 0) {
+      titleError = "Activity title cannot be left blank.";
+    } else if (this.state.title.length < 6 || this.state.title.length > 20) {
+      titleError =
+        "Please ensure your activity title is between 6 to 20 characters long.";
+    }
+
+    if (titleError) {
+      this.setState({ titleError });
+      return false;
+    }
+
+    //Image Validation
+    // https://images.unsplash.com/photo-1427384906349-30452365b5e8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80
+
+    if (this.state.imageUrl.length === 0) {
+      imageUrlError = "Please add an image for your activity.";
+    } else if (isImageUrl(this.state.imageUrl) === false) {
+      imageUrlError =
+        "Please ensure that your image is of the right file extension.";
+    }
+
+    if (imageUrlError) {
+      this.setState({ imageUrlError });
+      return false;
+    }
+
+    //Description Validation
+    if (this.state.description.length === 0) {
+      descriptionError = "Please write a description for your activity.";
+    } else if (this.state.description.length > 600) {
+      descriptionError =
+        "Please keep your description within 150 characters long.";
+    }
+
+    if (descriptionError) {
+      this.setState({ descriptionError });
+      return false;
+    }
+
+    //Time and Date validation
+    if (this.state.startDate.length === 0) {
+      startDateError = "Please select a date and time for your activity.";
+    }
+
+    if (startDateError) {
+      this.setState({ startDateError });
+      return false;
+    }
+
+    //Location Validation
+
+    if (this.state.location.address === 0) {
+      locationError = "Please enter a location.";
+    }
+    if (locationError) {
+      this.setState({ locationError });
+      return false;
+    }
+
+    return true;
+  };
 
   //Geolocation Coordinates
   handleSelect = async (value) => {
@@ -77,37 +155,61 @@ class Listings extends Component {
     });
   };
 
-  handleParticipantLimitChange = (event) => {
-    this.setState({
-      participantLimit: event.target.value,
-    });
+  formatAMPM = (date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes + " " + ampm;
+    return strTime;
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const formatDate = this.state.startDate.toDateString();
-    const formatTime = this.state.startDate.getHours();
-    const data = {
-      title: this.state.title,
-      description: this.state.description,
-      startDate: formatDate,
-      time: formatTime,
-      coordinates: this.state.coordinates,
-      location: this.state.address,
-      participantLimit: this.state.participantLimit,
-      imageUrl: this.state.imageUrl,
-      uid: this.props.userId,
-    };
-    console.log("CLICKEDDDDD-------------");
-    this.props.onCreateActivity();
-    this.props.onSubmitActivity(data);
+
+    const isValid = this.validate();
+    if (isValid) {
+      const formattedDate = this.state.startDate.toDateString();
+      const formattedTime = this.formatAMPM(this.state.startDate);
+
+      const data = {
+        title: this.state.title,
+        description: this.state.description,
+        startDate: formattedDate,
+        time: formattedTime,
+        coordinates: this.state.coordinates,
+        location: this.state.address,
+        imageUrl: this.state.imageUrl,
+        uid: this.props.userId,
+        createdBy: this.props.currentUserName,
+      };
+
+      console.log("CLICKEDDDDD-------------");
+      this.props.onCreateActivity();
+      this.props.onSubmitActivity(data);
+    } else {
+      return;
+    }
   };
 
   render() {
+    if (this.props.created) {
+      return <Redirect to="/" />;
+    }
     return (
       <div onSubmit={this.handleSubmit} className={"container"}>
-        <h1 style={{ textAlign: "center" }}>Organise an Activity</h1>
-        <hr />
+        <h1
+          style={{
+            textAlign: "center",
+            paddingTop: "20px",
+            marginBottom: "50px",
+          }}
+        >
+          Organise an Activity
+        </h1>
+
         <form>
           <label>Activity Title</label>
           <input
@@ -115,24 +217,22 @@ class Listings extends Component {
             name="title"
             onChange={this.handleTitleChange}
             value={this.state.title}
-            required
+            // required
           />
-          <label>Display an activity image. (Use Image URL)</label>
+          <p className="errorMessages" style={{ color: "red" }}>
+            {this.state.titleError}
+          </p>
+          <label>Display an activity image. (ext. png | jpg | jpeg)</label>
           <input
             type="text"
             name="image"
             onChange={this.handleImageChange}
             value={this.state.imageUrl}
-            required
+            // required
           />
-          <label>Set the maximum limit for number of participants.</label>
-          <input
-            type="number"
-            name="maxParticipants"
-            onChange={this.handleParticipantLimitChange}
-            value={this.state.participantLimit}
-            required
-          />
+          <p className="errorMessages" style={{ color: "red" }}>
+            {this.state.imageUrlError}
+          </p>
           <label>
             Add a description to your activity. (i.e. Things to bring, what to
             expect, timeline of activities)
@@ -142,8 +242,10 @@ class Listings extends Component {
             name="description"
             onChange={this.handleDescriptionChange}
             value={this.state.description}
-            required
           />
+          <p className="errorMessages" style={{ color: "red" }}>
+            {this.state.descriptionError}
+          </p>
           <label>Select start date and time. </label>
           <DatePicker
             name="dateAndTime"
@@ -158,8 +260,10 @@ class Listings extends Component {
             }
             timeClassName={this.handleColor}
             value={this.state.startDate}
-            required
           />
+          <p className="errorMessages" style={{ color: "red" }}>
+            {this.state.startDateError}
+          </p>
 
           <label>Type in location and click on selected choice.</label>
           <PlacesAutocomplete
@@ -179,7 +283,7 @@ class Listings extends Component {
                   // type="text"
                   // value={this.state.value}
                   {...getInputProps({ placeholder: "Enter Location" })}
-                  required
+                  // required
                 />
                 <div>
                   {loading ? <div>...loading</div> : null}
@@ -202,6 +306,9 @@ class Listings extends Component {
               </div>
             )}
           </PlacesAutocomplete>
+          <p className="errorMessages" style={{ color: "red" }}>
+            {this.state.locationError}
+          </p>
 
           <input type="submit" className={"button"} />
         </form>
@@ -215,6 +322,7 @@ const mapStateToProps = (state) => {
     userId: state.auth.uid,
     loading: state.activity.loading,
     created: state.activity.created,
+    currentUserName: state.auth.currentUserName,
   };
 };
 
@@ -222,6 +330,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onSubmitActivity: (data) => dispatch(actions.createActivity(data)),
     onCreateActivity: () => dispatch(actions.createInit()),
+    onGetUserName: (uid) => dispatch(actions.getUserName(uid)),
   };
 };
 

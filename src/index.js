@@ -31,7 +31,7 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <React.StrictMode>
-        <App />
+        <App style={{ height: "100%" }} />
       </React.StrictMode>
     </BrowserRouter>
   </Provider>,

@@ -104,57 +104,59 @@ class ReceivedRequests extends Component {
         return (
           <div key={data.id} className={"receivedCards"}>
             {data.status === "accepted" ? (
-              <h4>Accepted </h4>
+              <h4 style={{ color: "#96bb7c" }}>Accepted </h4>
             ) : data.status === "declined" ? (
-              <h4>Declined</h4>
+              <h4 style={{ color: "#e84a5f" }}>Declined</h4>
             ) : (
-              <h4>Pending</h4>
+              <h4 style={{ color: "#ad9d9d" }}>Pending</h4>
             )}
-            <h2>From: {data.userData.fullName} </h2>
-            <h4>Activity: {data.activityData.data.title}</h4>
-            <h6>Date: {data.activityData.data.startDate}</h6>
-            <img src={data.userData.avatar} alt="" />
-            <p>Note from participant: {data.note}</p>
+            <p className="from-user">From: {data.userData.fullName} </p>
+            <p className="activity">Activity: {data.activityData.data.title}</p>
+            <p className="date">Date: {data.activityData.data.startDate}</p>
+            <p className="user-note">Note from participant: {data.note}</p>
 
-            {data.status === "pending" && !data.participantConfirmed ? (
-              <Aux>
-                <hr />
-                <button
-                  onClick={() =>
-                    this.acceptOffer(
-                      data.activityId,
-                      data.activityData.data.title,
-                      data.activityData.data.imageUrl,
-                      data.toUser,
-                      data.id,
-                      data.fromUser,
-                      data.userData.fullName,
-                      data.userData.avatar,
-                      data.organiserInfo.fullName,
-                      data.organiserInfo.avatar
-                    )
-                  }
-                >
-                  Accept
-                </button>
-                <button onClick={() => this.declineOffer(data.id)}>
-                  Decline
-                </button>
-              </Aux>
-            ) : null}
+            <div className="button-group">
+              {data.status === "pending" && !data.participantConfirmed ? (
+                <Aux>
+                  <hr />
+                  <button
+                    className="success-button"
+                    onClick={() =>
+                      this.acceptOffer(
+                        data.activityId,
+                        data.activityData.data.title,
+                        data.activityData.data.imageUrl,
+                        data.toUser,
+                        data.id,
+                        data.fromUser,
+                        data.userData.fullName,
+                        data.userData.avatar,
+                        data.organiserInfo.fullName,
+                        data.organiserInfo.avatar
+                      )
+                    }
+                  >
+                    Accept
+                  </button>
+                  <button
+                    className="negative-button"
+                    onClick={() => this.declineOffer(data.id)}
+                  >
+                    Decline
+                  </button>
+                </Aux>
+              ) : null}
+            </div>
           </div>
         );
       });
     }
 
     return (
-      <div className="container">
-        <div className="content-wrapper">
-          <h1 className="title">Received Requests</h1>
-          <div className="columns">
-            <div className="column is-one-third">{receivedRequests}</div>
-          </div>
-        </div>
+      <div className="received-container">
+        <h1 className="title">Received Requests</h1>
+        <hr />
+        <div className="received-wrapper">{receivedRequests}</div>
       </div>
     );
   }

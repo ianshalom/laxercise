@@ -1,7 +1,55 @@
 .receivedCards {
-  background-color: #ccc;
   width: 200px;
-  height: 600px;
-  border: 1px solid blue;
+  height: 400px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
   padding: 10px;
+  border-radius: 15px;
+  margin: 20px;
+}
+
+.received-container,
+.sent-container {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.title {
+  padding-top: 10px;
+}
+
+.received-wrapper,
+.sent-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.success-button {
+  text-transform: uppercase;
+  text-decoration: none;
+  background-color: #fbe6d4;
+  text-align: center;
+  width: 80px;
+  border-radius: 12px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  padding: 3px;
+}
+
+.negative-button {
+  text-transform: uppercase;
+  text-decoration: none;
+  background-color: #ed6663;
+  text-align: center;
+  width: 80px;
+  border-radius: 12px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  padding: 3px;
+}
+
+.grey-it {
+  font-weight: bold;
+  color: #3f4441;
 }

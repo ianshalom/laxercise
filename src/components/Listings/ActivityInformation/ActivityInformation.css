@@ -6,10 +6,11 @@
 
 .grey-it {
   color: #4b5d67;
+  font-weight: bold;
 }
 
 .key-details {
-  margin-top: 35px;
+  max-width: 500px;
 }
 
 p {
@@ -17,5 +18,9 @@ p {
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 25px;
 }
+
+/* .activity-description {
+  font-size: 15px;
+} */

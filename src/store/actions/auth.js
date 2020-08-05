@@ -53,6 +53,25 @@ export const getUserProfile = (uid) =>
       ...snapshot.data(),
     }));
 
+export const getUserNameSuccess = (name) => {
+  return {
+    type: actionTypes.GET_USER_NAME_SUCCESS,
+    name: name,
+  };
+};
+
+export const getUserName = (uid) => {
+  return (dispatch) => {
+    db.collection("profiles")
+      .doc(uid)
+      .get()
+      .then((username) => {
+        const name = username.data().fullName;
+        dispatch(getUserNameSuccess(name));
+      });
+  };
+};
+
 //CHECK AUTH END ######################
 
 //CREATE USER PROFILE END ######################

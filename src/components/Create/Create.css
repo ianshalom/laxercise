@@ -33,3 +33,8 @@ form textarea {
 
   text-align: center;
 }
+
+.errorMessages {
+  font-size: 15px;
+  margin-left: 20px;
+}

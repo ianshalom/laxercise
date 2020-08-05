@@ -5,46 +5,11 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
 import Aux from "../../hoc/Aux";
 import "./RightNav.css";
-// import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class RightNav extends Component {
   render() {
-    // const UL = styled.ul`
-    //   list-style: none;
-    //   display: flex;
-    //   flex-flow: row nowrap;
-
-    //   li {
-    //     padding: 18px 10px;
-    //   }
-
-    //   @media (max-width: 768px) {
-    //     .Nav {
-    //       flex-flow: column nowrap;
-    //       background-color: #221f3b;
-    //       position: fixed;
-    //       top: 0;
-    //       width: 50%;
-    //       height: 60vh;
-    //       padding-top: 3.5rem;
-    //       padding: 10px;
-    //       text-align: center;
-    //     }
-    //     .NavElements {
-    //       color: white;
-    //     }
-    //   }
-    //     .NavElements {
-    //       color: white;
-    //     }
-    //   }
-    // `;
-    // ${({ open }) =>
-    //     open
-    //       ? console.log("translateX(0)")
-    //       : console.log("translateX(100%)")};
     return (
-      //   <UL open={this.props.open}>
       <ul className={"Nav"} open={this.props.open}>
         {this.props.authState ? (
           <Aux>
@@ -92,7 +57,7 @@ class RightNav extends Component {
             </li>
             <li>
               <Link to="/messages" className={"NavElements"}>
-                Messages
+                <FontAwesomeIcon icon="envelope" size="lg" />
               </Link>
             </li>
           </Aux>
@@ -105,7 +70,6 @@ class RightNav extends Component {
           </div>
         )}
       </ul>
-      //   </UL>
     );
   }
 }

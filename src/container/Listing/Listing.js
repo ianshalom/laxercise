@@ -31,7 +31,7 @@ class Listing extends Component {
     }
 
     return (
-      <div className="row displayActivities">
+      <div className="displayActivities">
         {this.props.loading ? <Spinner /> : listings}
       </div>
     );

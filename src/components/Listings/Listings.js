@@ -15,7 +15,9 @@ class Listings extends Component {
         </div>
         <div className={"card-text"}>
           <h4 className={"card-title"}>{this.props.title}</h4>
-          <p className={"card-description"}>{this.props.description}</p>
+          <p className={"card-description"}>
+            {this.props.description.substring(0, 80)}...
+          </p>
         </div>
 
         <Link key={this.props.id} to={"/listings/" + this.props.id}>
