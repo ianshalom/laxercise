@@ -2,6 +2,9 @@
   "name": "laxercise",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
@@ -32,9 +35,6 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^1.1.1",
     "styled-components": "^5.1.1"
-  },
-  "engines": {
-    "node": "12.7.0"
   },
   "scripts": {
     "start": "react-scripts start",
