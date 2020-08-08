@@ -142,6 +142,7 @@ class ReceivedRequests extends Component {
             </div>
           );
         }
+        return receivedRequests;
       });
     }
 
