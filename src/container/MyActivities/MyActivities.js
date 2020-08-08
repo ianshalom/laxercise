@@ -15,7 +15,6 @@ class MyActivities extends Component {
         return (
           <Listings
             key={listing.id}
-            id={listing.id}
             title={listing.data.title}
             description={listing.data.description}
             startDate={listing.data.startDate}

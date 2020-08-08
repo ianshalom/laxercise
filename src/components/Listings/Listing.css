@@ -1,13 +1,14 @@
 .whole-container {
   text-align: center;
-  margin-top: 10px;
   height: 100vh;
 }
+
+/* .listing-container {
+} */
 
 .top-container {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 100px;
   padding: 10px;
 }
 

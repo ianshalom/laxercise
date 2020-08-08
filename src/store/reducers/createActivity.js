@@ -11,6 +11,7 @@ const initialState = {
   created: false,
   activityId: null,
   joining: false,
+  redirect: false,
 };
 
 //ADDING ACTIVITY TO DB
@@ -19,10 +20,12 @@ const createActivityStart = (state, action) => {
 };
 
 const createActivitySuccess = (state, action) => {
+  console.log(action.activityData);
   return updateObject(state, {
     loading: false,
     created: true,
-    activityData: action.activityData,
+    // activityData: state.activityData.concat(action.activityData),
+    redirect: true,
   });
 };
 

@@ -20,6 +20,12 @@ const withAuthorization = (Component) => {
           changeParticipationStatus={this.props.onParticipantStatusChange}
           messages={this.props.messages}
           removeButton={this.props.removeButton}
+          currentUserName={this.props.currentUserName}
+          loadingAfterCreating={this.props.loadingAfterCreating}
+          redirect={this.props.redirect}
+          created={this.props.created}
+          onGetUserName={this.props.onGetUserName}
+          onSubmitActivity={this.props.onSubmitActivity}
         />
       ) : (
         <Redirect to="/login" />
@@ -37,6 +43,10 @@ const withAuthorization = (Component) => {
       receivedRequests: state.requests.received,
       messages: state.auth.user.messages,
       removeButton: state.activity.removeButton,
+      currentUserName: state.auth.currentUserName,
+      loadingAfterCreating: state.activity.loading,
+      redirect: state.auth.redirect,
+      created: state.activity.created,
     };
   };
 
@@ -47,6 +57,8 @@ const withAuthorization = (Component) => {
       onReceivedRequests: (id) => dispatch(actions.fetchReceivedRequests(id)),
       onParticipantStatusChange: (confirmationId, status) =>
         dispatch(actions.changeParticipationStatus(confirmationId, status)),
+      onSubmitActivity: (data) => dispatch(actions.createActivity(data)),
+      onGetUserName: (uid) => dispatch(actions.getUserName(uid)),
     };
   };
 

@@ -27,11 +27,7 @@ class Listings extends Component {
         <div className={"card-date"}>{this.props.startDate}</div>
       </>
     );
-    return (
-      <div className={"card-grid"} key={this.props.key}>
-        {activityCard}
-      </div>
-    );
+    return <div className={"card-grid"}>{activityCard}</div>;
   }
 }
 

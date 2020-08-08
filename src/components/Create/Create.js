@@ -6,10 +6,10 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from "react-places-autocomplete";
-import { connect } from "react-redux";
-import * as actions from "../../store/actions/index";
+
 import { Redirect } from "react-router-dom";
 import isImageUrl from "is-image-url";
+import withAuthorization from "../../hoc/withAuth";
 
 class Listings extends Component {
   state = {
@@ -32,17 +32,17 @@ class Listings extends Component {
   //##################################################
 
   componentDidMount() {
-    // if (this.props.redirect) {
-    //   return <Redirect to="/" />;
-    // }
-    this.props.onGetUserName(this.props.userId);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.title !== this.state.title) {
+    if (this.props.redirect) {
       return <Redirect to="/" />;
     }
+    this.props.onGetUserName(this.props.currentUserId);
   }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.title !== this.state.title) {
+  //     return <Redirect to="/" />;
+  //   }
+  // }
 
   validate = () => {
     console.log(this.state.description.length);
@@ -182,12 +182,12 @@ class Listings extends Component {
         coordinates: this.state.coordinates,
         location: this.state.address,
         imageUrl: this.state.imageUrl,
-        uid: this.props.userId,
+        uid: this.props.currentUserId,
         createdBy: this.props.currentUserName,
       };
 
       console.log("CLICKEDDDDD-------------");
-      this.props.onCreateActivity();
+      // this.props.onCreateActivity();
       this.props.onSubmitActivity(data);
     } else {
       return;
@@ -317,21 +317,22 @@ class Listings extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    userId: state.auth.uid,
-    loading: state.activity.loading,
-    created: state.activity.created,
-    currentUserName: state.auth.currentUserName,
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     // userId: state.auth.uid,
+//     // loading: state.activity.loading,
+//     // created: state.activity.created,
+//     // currentUserName: state.auth.currentUserName,
+//     // redirect: state.auth.redirect,
+//   };
+// };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onSubmitActivity: (data) => dispatch(actions.createActivity(data)),
-    onCreateActivity: () => dispatch(actions.createInit()),
-    onGetUserName: (uid) => dispatch(actions.getUserName(uid)),
-  };
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     onSubmitActivity: (data) => dispatch(actions.createActivity(data)),
+//     onCreateActivity: () => dispatch(actions.createInit()),
+//     // onGetUserName: (uid) => dispatch(actions.getUserName(uid)),
+//   };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Listings);
+export default withAuthorization(Listings);

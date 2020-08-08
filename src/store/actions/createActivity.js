@@ -49,12 +49,12 @@ export const createInit = () => {
 // export const createUserRef = (uid) => db.doc("profiles/" + uid);
 
 export const createActivity = (data) => {
-  return (dispatch) => {
-    dispatch(createActivityStart());
+  return async (dispatch) => {
+    await dispatch(createActivityStart());
     db.collection("activities")
       .add({ data })
-      .then((docRef) => {
-        dispatch(createActivitySuccess(data));
+      .then(async (docRef) => {
+        await dispatch(createActivitySuccess(data));
       })
       .catch((err) => {
         dispatch(createActivityFail(err));

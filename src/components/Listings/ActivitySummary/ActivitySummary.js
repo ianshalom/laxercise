@@ -19,16 +19,6 @@ const ActivitySummary = (props) => {
 
   const submitConfirmation = () => {
     createConfirmation(confirmation);
-    // .then((_) => {
-    //   addToast("Your attendance has been confirmed for this activity!", {
-    //     appearance: "success",
-    //     autodismiss: "true",
-    //     autodimisstimeout: 3000,
-    //   });
-    // })
-    // .catch((error) => {
-    //   console.log(error);
-    // });
     props.modalClosed();
   };
 
@@ -72,7 +62,7 @@ const ActivitySummary = (props) => {
         Back
       </button>
       <button onClick={submitConfirmation} style={{ display: "inline-block" }}>
-        Confim
+        Confirm
       </button>
     </div>
   );

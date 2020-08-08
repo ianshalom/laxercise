@@ -53,18 +53,7 @@ class ReceivedRequests extends Component {
       }
     );
   };
-  // this.createCollaboration(
-  //                       activityId,
-  //                       activityData.data.title,
-  //                       activityData.data.imageUrl,
-  //                       toUser,
-  //                       id,
-  //                       fromUser,
-  //                       userData.fullName,
-  //                       userData.avatar,
-  //                       organiserInfo.fullName,
-  //                       organiserInfo.avatar
-  //                     )
+
   acceptOffer = (
     activityId,
     title,
@@ -98,57 +87,61 @@ class ReceivedRequests extends Component {
 
   render() {
     let receivedRequests = null;
-    // console.log(this.props.received);
+
     if (this.props.received) {
       receivedRequests = this.props.received.map((data) => {
-        return (
-          <div key={data.id} className={"receivedCards"}>
-            {data.status === "accepted" ? (
-              <h4 style={{ color: "#96bb7c" }}>Accepted </h4>
-            ) : data.status === "declined" ? (
-              <h4 style={{ color: "#e84a5f" }}>Declined</h4>
-            ) : (
-              <h4 style={{ color: "#ad9d9d" }}>Pending</h4>
-            )}
-            <p className="from-user">From: {data.userData.fullName} </p>
-            <p className="activity">Activity: {data.activityData.data.title}</p>
-            <p className="date">Date: {data.activityData.data.startDate}</p>
-            <p className="user-note">Note from participant: {data.note}</p>
+        if (data.activityData) {
+          return (
+            <div key={data.id} className={"receivedCards"}>
+              {data.status === "accepted" ? (
+                <h4 style={{ color: "#96bb7c" }}>Accepted </h4>
+              ) : data.status === "declined" ? (
+                <h4 style={{ color: "#e84a5f" }}>Declined</h4>
+              ) : (
+                <h4 style={{ color: "#ad9d9d" }}>Pending</h4>
+              )}
+              <p className="from-user">From: {data.userData.fullName} </p>
+              <p className="activity">
+                Activity: {data.activityData.data.title}
+              </p>
+              <p className="date">Date: {data.activityData.data.startDate}</p>
+              <p className="user-note">Note from participant: {data.note}</p>
 
-            <div className="button-group">
-              {data.status === "pending" && !data.participantConfirmed ? (
-                <Aux>
-                  <hr />
-                  <button
-                    className="success-button"
-                    onClick={() =>
-                      this.acceptOffer(
-                        data.activityId,
-                        data.activityData.data.title,
-                        data.activityData.data.imageUrl,
-                        data.toUser,
-                        data.id,
-                        data.fromUser,
-                        data.userData.fullName,
-                        data.userData.avatar,
-                        data.organiserInfo.fullName,
-                        data.organiserInfo.avatar
-                      )
-                    }
-                  >
-                    Accept
-                  </button>
-                  <button
-                    className="negative-button"
-                    onClick={() => this.declineOffer(data.id)}
-                  >
-                    Decline
-                  </button>
-                </Aux>
-              ) : null}
+              <div className="button-group">
+                {data.status === "pending" && !data.participantConfirmed ? (
+                  <Aux>
+                    <hr />
+                    <button
+                      className="success-button"
+                      onClick={() =>
+                        this.acceptOffer(
+                          data.activityId,
+                          data.activityData.data.title,
+                          data.activityData.data.imageUrl,
+                          data.toUser,
+                          data.id,
+                          data.fromUser,
+                          data.userData.fullName,
+                          data.userData.avatar,
+                          data.organiserInfo.fullName,
+                          data.organiserInfo.avatar
+                        )
+                      }
+                    >
+                      Accept
+                    </button>
+                    <button
+                      className="negative-button"
+                      onClick={() => this.declineOffer(data.id)}
+                    >
+                      Decline
+                    </button>
+                  </Aux>
+                ) : null}
+              </div>
             </div>
-          </div>
-        );
+          );
+        }
       });
     }
 

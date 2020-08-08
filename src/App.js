@@ -25,7 +25,6 @@ class App extends Component {
       this.props.onResetAuth();
       this.props.onStoreAuth(authUser);
       if (authUser) {
-        console.log(authUser.uid);
         this.props.onGetMessages(authUser.uid);
       }
     });
