@@ -7,13 +7,14 @@ import { connect } from "react-redux";
 
 class Listing extends Component {
   componentDidMount() {
+    console.log("Fetching activities list");
     this.props.onFetchActivitiesList();
   }
 
   render() {
     let listings = null;
     console.log(this.props.activities);
-    if (this.props.activities || this.props.activities === []) {
+    if (this.props.activities) {
       listings = this.props.activities.map((listing) => {
         return (
           <Listings
@@ -29,7 +30,6 @@ class Listing extends Component {
         );
       });
     }
-
     return (
       <div className="displayActivities">
         {this.props.loading ? <Spinner /> : listings}

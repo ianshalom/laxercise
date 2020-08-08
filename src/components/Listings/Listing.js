@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
 import Modal from "../UI/Modal/Modal";
 import ActivitySummary from "./ActivitySummary/ActivitySummary";
-// import Image from "./Image/Image";
+
 import ActivityInformation from "./ActivityInformation/ActivityInformation";
 import Participants from "./Participants/Participants";
 import "./Listing.css";
@@ -15,6 +15,7 @@ class Listing extends Component {
   state = {
     markerShown: true,
     accepted: false,
+    changed: false,
   };
 
   componentDidMount() {
@@ -22,8 +23,51 @@ class Listing extends Component {
     this.props.onFetchParticipantsData(this.props.match.params.listingId);
   }
 
+  refreshPage() {
+    window.location.reload(false);
+  }
+
+  switchJoinStatusButton = (currentUserActivityData) => {
+    switch (true) {
+      case this.props.activity.uid === this.props.currentUser:
+      case !this.props.isAuth:
+        return;
+      case currentUserActivityData === undefined:
+        return (
+          <button
+            className={"join-button"}
+            onClick={this.props.onJoinActivity}
+            type="button"
+          >
+            Join
+          </button>
+        );
+      case currentUserActivityData !== undefined ||
+        currentUserActivityData.length !== 0:
+        return (
+          <button
+            className={"join-button"}
+            disabled
+            style={{
+              backgroundColor:
+                currentUserActivityData.status === "accepted"
+                  ? "green"
+                  : currentUserActivityData.status === "declined"
+                  ? "red"
+                  : null,
+            }}
+          >
+            {currentUserActivityData.status.toUpperCase()}
+          </button>
+        );
+      default:
+        return;
+    }
+  };
+
   render() {
-    console.log(this.props.activity);
+    console.log(this.state.changed);
+
     let listing = null;
     if (this.props.activity && this.props.activityData) {
       let currentUserActivityDataIndex = null;
@@ -34,6 +78,7 @@ class Listing extends Component {
         currentUserActivityDataIndex
       ];
 
+      console.log(this.props.statusChanged);
       listing = (
         <div>
           <Modal
@@ -47,41 +92,19 @@ class Listing extends Component {
               confirmation={this.props.onConfirmation}
               currentUser={this.props.currentUser}
               activityId={this.props.match.params.listingId}
+              refresh={this.refreshPage}
             />
           </Modal>
+
           <div className={"join-button-container"}>
-            {this.props.activity.uid === this.props.currentUser ||
-            !this.props.isAuth ? null : !currentUserActivityData &&
-              !this.props.statusChanged ? (
-              <button
-                className={"join-button"}
-                onClick={this.props.onJoinActivity}
-                type="button"
-              >
-                Join
-              </button>
-            ) : (
-              <button
-                className={"join-button"}
-                disabled
-                style={{
-                  backgroundColor:
-                    currentUserActivityData.status === "accepted"
-                      ? "green"
-                      : currentUserActivityData.status === "declined"
-                      ? "red"
-                      : null,
-                }}
-              >
-                {currentUserActivityData.status.toUpperCase()}
-              </button>
-            )}
+            {this.switchJoinStatusButton(currentUserActivityData)}
           </div>
+
           <div className={"whole-container"}>
             <h1 className={"header"}>{this.props.activity.title}</h1>
 
             <hr />
-            <div className="top-container">
+            <div className={"top-container"}>
               <div className={"map-container"}>
                 <MyMapComponent
                   isMarkerShown={this.state.markerShown}
@@ -110,8 +133,11 @@ class Listing extends Component {
         </div>
       );
     }
-    return <div>{listing}</div>;
-    // }{this.props.loading ? <Spinner /> : listing}
+    return (
+      <div className={"listing-container"}>
+        {this.props.loading ? <Spinner /> : listing}
+      </div>
+    );
   }
 }
 const mapStateToProps = (state) => {

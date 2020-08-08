@@ -8,8 +8,7 @@ const Home = () => {
   return (
     <Aux>
       <LandingPage />
-
-      <Listing />
+      <Listing style={{ marginTop: "120px" }} />
     </Aux>
   );
 };
